@@ -5,4 +5,6 @@ export const PreferencesContext = React.createContext({
   isThemeDark: false,
   isLogedIn: false,
   toggleLogin: () => {},
+  gotMessage: true,
+  toggleMessage: () => {},
 });

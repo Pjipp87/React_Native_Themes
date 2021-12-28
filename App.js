@@ -18,6 +18,7 @@ import {
 } from "react-native-paper";
 import merge from "deepmerge";
 import { PreferencesContext } from "./src/utils/ThemeContext";
+import * as Icon from "@expo/vector-icons";
 
 const CombinedDefaultTheme = merge(PaperDefaultTheme, NavigationDefaultTheme);
 const CombinedDarkTheme = merge(PaperDarkTheme, NavigationDarkTheme);
@@ -27,6 +28,7 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   const [isThemeDark, setIsThemeDark] = React.useState(false);
   const [isLogedIn, setIsLogedIn] = useState(false);
+  const [gotMessage, setGotMessage] = useState(true);
 
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
 
@@ -38,25 +40,76 @@ export default function App() {
     return setIsLogedIn(!isLogedIn);
   }, [isLogedIn]);
 
+  const toggleMessage = React.useCallback(() => {
+    return setGotMessage(!gotMessage);
+  }, [gotMessage]);
+
   const preferences = React.useMemo(
     () => ({
       toggleTheme,
       isThemeDark,
       isLogedIn,
       toggleLogin,
+      gotMessage,
+      toggleMessage,
     }),
-    [toggleTheme, isThemeDark, isLogedIn, toggleLogin]
+    [
+      toggleTheme,
+      isThemeDark,
+      isLogedIn,
+      toggleLogin,
+      gotMessage,
+      toggleMessage,
+    ]
   );
 
   return (
     <PreferencesContext.Provider value={preferences}>
       <PaperProvider theme={theme}>
         <NavigationContainer theme={theme}>
-          <Tab.Navigator>
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
+
+                if (route.name === "Startseite") {
+                  //iconName = focused ? "home" : "home-outline";
+                  iconName = "home";
+                } else if (route.name === "Neuigkeiten") {
+                  //iconName = focused ? "newspaper" : "newspaper-outline";
+                  iconName = "newspaper";
+                } else if (route.name === "Freunde") {
+                  //iconName = focused ? "newspaper" : "newspaper-outline";
+                  iconName = "user-friends";
+                } else if (route.name === "Nachrichten") {
+                  //iconName = focused ? "newspaper" : "newspaper-outline";
+                  iconName = "inbox";
+                } else if (route.name === "Einstellungen") {
+                  //iconName = focused ? "newspaper" : "newspaper-outline";
+                  iconName = "bars";
+                }
+
+                // You can return any component that you like here!
+                return (
+                  <Icon.FontAwesome5
+                    name={iconName}
+                    size={size}
+                    color={color}
+                  />
+                );
+              },
+              tabBarActiveTintColor: "tomato",
+              tabBarInactiveTintColor: "gray",
+            })}
+          >
             <Tab.Screen name="Startseite" component={MainScreen} />
             <Tab.Screen name="Neuigkeiten" component={NewsScreen} />
             <Tab.Screen name="Freunde" component={FriendsScreen} />
-            <Tab.Screen name="Nachrichten" component={MessageScreen} />
+            <Tab.Screen
+              name="Nachrichten"
+              component={MessageScreen}
+              options={gotMessage ? { tabBarBadge: 5 } : null}
+            />
             <Tab.Screen name="Einstellungen" component={SettingsScreen} />
           </Tab.Navigator>
         </NavigationContainer>
