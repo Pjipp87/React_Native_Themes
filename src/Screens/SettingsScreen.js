@@ -1,6 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
-
+import { StyleSheet, View, Pressable } from "react-native";
 import { Switch, TouchableRipple, Text, useTheme } from "react-native-paper";
 import { PreferencesContext } from "../utils/ThemeContext";
 
@@ -10,14 +9,21 @@ export const SettingsScreen = ({ scene }) => {
 
   return (
     <View>
-      <Text>Settings:</Text>
-      <TouchableRipple onPress={() => toggleTheme()}>
+      <Text style={{ textAlign: "center" }}>Einstellungen</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-around",
+          alignItems: "center",
+        }}
+      >
+        <Text>Darkmode:</Text>
         <Switch
-          style={[{ backgroundColor: theme.colors.accent }]}
           color={"red"}
           value={isThemeDark}
+          onValueChange={() => toggleTheme()}
         />
-      </TouchableRipple>
+      </View>
     </View>
   );
 };
