@@ -1,32 +1,23 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { Button } from "react-native-paper";
-import { useTheme } from "react-native-paper";
-import { Text } from "react-native-paper";
-import { Switch } from "react-native-paper";
 
-export const SettingsScreen = ({ theme }) => {
-  const { colors } = useTheme();
+import { Switch, TouchableRipple, Text, useTheme } from "react-native-paper";
+import { PreferencesContext } from "../utils/ThemeContext";
+
+export const SettingsScreen = ({ scene }) => {
+  const theme = useTheme();
+  const { toggleTheme, isThemeDark } = React.useContext(PreferencesContext);
+
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: colors.background,
-      }}
-    >
+    <View>
       <Text>Settings:</Text>
-      <Button
-        mode="contained"
-        compact={true}
-        raised
-        color={colors.primary}
-        theme={{ roundness: 3 }}
-        onPress={() => alert("klappt")}
-      >
-        Klick mich
-      </Button>
+      <TouchableRipple onPress={() => toggleTheme()}>
+        <Switch
+          style={[{ backgroundColor: theme.colors.accent }]}
+          color={"red"}
+          value={isThemeDark}
+        />
+      </TouchableRipple>
     </View>
   );
 };
