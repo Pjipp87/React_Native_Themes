@@ -29,6 +29,7 @@ export const LoginModal = () => {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isLoading, setisLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const checkLogin = () => {
     if (
@@ -38,7 +39,7 @@ export const LoginModal = () => {
       setisLoading(true);
       setTimeout(() => {
         toggleLogin();
-      }, 2000);
+      }, 1000);
     } else {
       alert("Zugangsdaten nicht Korrekt!");
     }
@@ -66,7 +67,14 @@ export const LoginModal = () => {
             placeholder="Passwort"
             mode="outlined"
             label="Password"
+            secureTextEntry={!showPassword}
             onChangeText={(text) => setPassword(text)}
+            right={
+              <TextInput.Icon
+                name="eye"
+                onPress={() => setShowPassword(!showPassword)}
+              />
+            }
           />
 
           <View

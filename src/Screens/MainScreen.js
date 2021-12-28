@@ -9,13 +9,12 @@ import { LoginModal } from "../components/LoginModal";
 
 export const MainScreen = ({ scene }) => {
   const { isLogedIn, toggleLogin } = React.useContext(PreferencesContext);
-  console.log(isLogedIn);
 
   if (!isLogedIn) return <LoginModal />;
 
   return (
-    <View>
-      <Text>MainScreen </Text>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>MainScreen</Text>
       <Button
         mode="contained"
         compact={true}
