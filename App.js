@@ -26,6 +26,7 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [isThemeDark, setIsThemeDark] = React.useState(false);
+  const [isLogedIn, setIsLogedIn] = useState(false);
 
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
 
@@ -33,12 +34,18 @@ export default function App() {
     return setIsThemeDark(!isThemeDark);
   }, [isThemeDark]);
 
+  const toggleLogin = React.useCallback(() => {
+    return setIsLogedIn(!isLogedIn);
+  }, [isLogedIn]);
+
   const preferences = React.useMemo(
     () => ({
       toggleTheme,
       isThemeDark,
+      isLogedIn,
+      toggleLogin,
     }),
-    [toggleTheme, isThemeDark]
+    [toggleTheme, isThemeDark, isLogedIn, toggleLogin]
   );
 
   return (
