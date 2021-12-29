@@ -21,7 +21,7 @@ export const MainScreen = ({ scene }) => {
         icon="home"
         onPress={() => toggleLogin()}
       >
-        Main
+        Logout
       </Button>
     </View>
   );

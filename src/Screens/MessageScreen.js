@@ -10,12 +10,7 @@ export const MessageScreen = () => {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Text>MessageScreen</Text>
-      <Button
-        mode="contained"
-        compact={true}
-        icon="home"
-        onPress={() => toggleMessage()}
-      >
+      <Button mode="contained" compact={true} onPress={() => toggleMessage()}>
         Löschen
       </Button>
     </View>
