@@ -27,7 +27,8 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [isThemeDark, setIsThemeDark] = React.useState(false);
-  const [isLogedIn, setIsLogedIn] = useState(false);
+  // TODO: isLogedIn wieder auf false setzen
+  const [isLogedIn, setIsLogedIn] = useState(true);
   const [gotMessage, setGotMessage] = useState(true);
 
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
