@@ -6,7 +6,7 @@ import { Dimensions } from "react-native";
 
 export const FriendListItem = ({ friend }) => {
   const { firstname, lastname, status, picture, email, dateOfBirth } = friend;
-  console.log(lastname);
+
   const windowWidth = Dimensions.get("window").width;
   return (
     <Pressable
