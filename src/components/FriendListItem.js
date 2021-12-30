@@ -1,51 +1,69 @@
 import React from "react";
 import { Pressable, StyleSheet, View } from "react-native";
-import { Text } from "react-native-paper";
+import { Text, Surface, Avatar, IconButton } from "react-native-paper";
 import { Image } from "react-native";
 import { Dimensions } from "react-native";
 
 export const FriendListItem = ({ friend }) => {
-  const { firstname, lastname, status, picture, email, dateOfBirth } = friend;
+  const { name, dob, status, picture, email, dateOfBirth } = friend;
 
   const windowWidth = Dimensions.get("window").width;
   return (
-    <Pressable
-      onPress={() =>
-        alert(
-          firstname + " " + lastname + " hat am " + dateOfBirth + " Geburtstag"
-        )
-      }
+    <Surface
+      style={{
+        flex: 1,
+        elevation: 5,
+        width: windowWidth * 0.95,
+        marginHorizontal: 5,
+        marginTop: 15,
+      }}
     >
-      <View
-        style={{
-          paddingLeft: 20,
-          width: windowWidth,
-          flex: 1,
-          paddingVertical: 15,
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
+      <Pressable
+        onPress={() =>
+          alert(
+            name.first + " " + name.last + " hat am " + dob.date + " Geburtstag"
+          )
+        }
+        style={{}}
       >
-        <Image
-          style={styles.tinyLogo}
-          source={{
-            uri: picture,
-          }}
-        />
         <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          style={{
+            paddingHorizontal: 20,
+            flex: 1,
+            paddingVertical: 15,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
-          <View>
-            <Text style={{ fontSize: 24, fontWeight: "bold" }}>
-              {firstname} {lastname}
-            </Text>
+          <Avatar.Image
+            size={60}
+            source={{
+              uri: picture.large,
+            }}
+          />
+          <View
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          >
+            <View>
+              <Text style={{ fontSize: 24, fontWeight: "bold" }}>
+                {name.first} {name.last}
+              </Text>
 
-            <Text style={{ fontSize: 14, fontStyle: "italic" }}>{email}</Text>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>{status}</Text>
+              <Text style={{ fontSize: 14, fontStyle: "italic" }}>{email}</Text>
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                Kein Status verfügbar
+              </Text>
+            </View>
           </View>
+          <IconButton
+            icon="information-outline"
+            size={35}
+            onPress={() => alert("Info anzeigen")}
+          />
         </View>
-      </View>
-    </Pressable>
+      </Pressable>
+    </Surface>
   );
 };
 

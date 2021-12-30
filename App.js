@@ -30,6 +30,7 @@ export default function App() {
   // TODO: isLogedIn wieder auf false setzen
   const [isLogedIn, setIsLogedIn] = useState(true);
   const [gotMessage, setGotMessage] = useState(true);
+  const [friendArray, setFriendArray] = useState([]);
 
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
 
@@ -45,6 +46,11 @@ export default function App() {
     return setGotMessage(!gotMessage);
   }, [gotMessage]);
 
+  const addFriend = React.useCallback((item) => {
+    console.log("Vorher: ", friendArray);
+    return setFriendArray((friendArray) => [...friendArray, item]);
+  });
+
   const preferences = React.useMemo(
     () => ({
       toggleTheme,
@@ -53,6 +59,8 @@ export default function App() {
       toggleLogin,
       gotMessage,
       toggleMessage,
+      friendArray,
+      addFriend,
     }),
     [
       toggleTheme,
@@ -61,6 +69,8 @@ export default function App() {
       toggleLogin,
       gotMessage,
       toggleMessage,
+      friendArray,
+      addFriend,
     ]
   );
 
