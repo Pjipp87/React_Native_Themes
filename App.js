@@ -58,11 +58,14 @@ export default function App() {
     console.log("index", index);
 
     let tempArray = friendArray;
+    setFriendArray();
     console.log("anfang:", tempArray.length);
     tempArray.splice(index, 1);
     console.log("ende: ", tempArray.length);
     console.log(tempArray);
-    return setFriendArray(tempArray);
+    const newArray = tempArray;
+    setFriendArray(tempArray);
+    return setFriendArray((friendArray) => [...friendArray], newArray);
   });
 
   const preferences = React.useMemo(
