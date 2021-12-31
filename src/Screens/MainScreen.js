@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList, Vibration } from "react-native";
 import styled from "styled-components";
 import { useTheme, Snackbar, ActivityIndicator } from "react-native-paper";
 import { Button, Headline } from "react-native-paper";
@@ -47,6 +47,7 @@ export const MainScreen = ({ scene }) => {
   const _onAdd = (item) => {
     onToggleSnackBar();
     addFriend(item);
+    Vibration.vibrate(100);
   };
 
   const _refresh = () => {
