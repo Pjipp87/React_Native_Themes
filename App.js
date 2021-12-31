@@ -49,8 +49,9 @@ export default function App() {
   }, [gotMessage]);
 
   const addFriend = React.useCallback((item) => {
-    //console.log("Vorher: ", friendArray);
     return setFriendArray((friendArray) => [...friendArray, item]);
+
+    //console.log("Vorher: ", friendArray);
   });
 
   const removeFriend = React.useCallback((tempItem) => {

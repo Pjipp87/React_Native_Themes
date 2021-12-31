@@ -50,9 +50,29 @@ export const MainScreen = ({ scene }) => {
   }, []);
 
   const _onAdd = (item) => {
-    onToggleSnackBar(item);
-    addFriend(item);
     Vibration.vibrate(100);
+    if (
+      friendArray.findIndex((index) => index.login.uuid === item.login.uuid) ===
+      -1
+    ) {
+      onToggleSnackBar(item);
+      addFriend(item);
+      //#######################
+      /**
+ *       const index = friendsSuggestion.findIndex(
+        (index) => index.login.uuid === tempItem.login.uuid
+      );
+      let tempArray = friendsSuggestion;
+      tempArray.splice(index, 1);
+      return setfriendsSuggestion(
+        (friendsSuggestion) => [...friendsSuggestion],
+        tempArray
+      );
+ */
+      //#######################
+    } else {
+      alert("Kontakt bereits hinzugefügt!");
+    }
   };
 
   const _refresh = () => {
