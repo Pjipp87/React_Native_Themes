@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { Text, Surface, Avatar, IconButton } from "react-native-paper";
 import { Image } from "react-native";
 import { Dimensions } from "react-native";
+import { PreferencesContext } from "../utils/ThemeContext";
 
 export const FriendListItem = ({ friend }) => {
   const { name, dob, status, picture, email, dateOfBirth } = friend;
+  const { toggleInfoModal, setAktiveFriendFunc } =
+    React.useContext(PreferencesContext);
+
+  const _showInfo = () => {
+    setAktiveFriendFunc(friend);
+    toggleInfoModal();
+  };
 
   const windowWidth = Dimensions.get("window").width;
   return (
@@ -18,51 +26,42 @@ export const FriendListItem = ({ friend }) => {
         marginTop: 15,
       }}
     >
-      <Pressable
-        onPress={() =>
-          alert(
-            name.first + " " + name.last + " hat am " + dob.date + " Geburtstag"
-          )
-        }
-        style={{}}
+      <View
+        style={{
+          paddingHorizontal: 20,
+          flex: 1,
+          paddingVertical: 15,
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
       >
-        <View
-          style={{
-            paddingHorizontal: 20,
-            flex: 1,
-            paddingVertical: 15,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+        <Avatar.Image
+          size={60}
+          source={{
+            uri: picture.large,
           }}
+        />
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
-          <Avatar.Image
-            size={60}
-            source={{
-              uri: picture.large,
-            }}
-          />
-          <View
-            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-          >
-            <View>
-              <Text style={{ fontSize: 24, fontWeight: "bold" }}>
-                {name.first} {name.last}
-              </Text>
+          <View>
+            <Text style={{ fontSize: 24, fontWeight: "bold" }}>
+              {name.first} {name.last}
+            </Text>
 
-              <Text style={{ fontSize: 14, fontStyle: "italic" }}>{email}</Text>
-              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-                Kein Status verfügbar
-              </Text>
-            </View>
+            <Text style={{ fontSize: 14, fontStyle: "italic" }}>{email}</Text>
+            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+              Kein Status verfügbar
+            </Text>
           </View>
-          <IconButton
-            icon="information-outline"
-            size={35}
-            onPress={() => alert("Info anzeigen")}
-          />
         </View>
-      </Pressable>
+        <IconButton
+          icon="information-outline"
+          size={35}
+          onPress={() => _showInfo()}
+        />
+      </View>
     </Surface>
   );
 };

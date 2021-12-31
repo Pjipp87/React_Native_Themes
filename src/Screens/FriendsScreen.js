@@ -2,9 +2,15 @@ import React, { useEffect } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { FriendListItem } from "../components/FriendListItem";
 import { PreferencesContext } from "../utils/ThemeContext";
+import { Modal } from "react-native-paper";
+import { Text } from "react-native-paper";
+import { FriendInfoModal } from "../components/FriendInfoModal";
 
 export const FriendsScreen = () => {
-  const { friendArray } = React.useContext(PreferencesContext);
+  const { friendArray, showInfoModal, toogleInfoModal } =
+    React.useContext(PreferencesContext);
+
+  if (showInfoModal) return <FriendInfoModal />;
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>

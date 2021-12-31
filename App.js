@@ -31,6 +31,8 @@ export default function App() {
   const [isLogedIn, setIsLogedIn] = useState(true);
   const [gotMessage, setGotMessage] = useState(true);
   const [friendArray, setFriendArray] = useState([]);
+  const [showInfoModal, setshowInfoModal] = useState(false);
+  const [aktiveFriend, setAktiveFriend] = useState(null);
 
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
 
@@ -68,6 +70,17 @@ export default function App() {
     return setFriendArray((friendArray) => [...friendArray], newArray);
   });
 
+  const toggleInfoModal = React.useCallback(() => {
+    return setshowInfoModal(!showInfoModal);
+  }, [showInfoModal]);
+
+  const setAktiveFriendFunc = React.useCallback(
+    (item) => {
+      return setAktiveFriend(item);
+    },
+    [aktiveFriend]
+  );
+
   const preferences = React.useMemo(
     () => ({
       toggleTheme,
@@ -79,6 +92,10 @@ export default function App() {
       friendArray,
       addFriend,
       removeFriend,
+      showInfoModal,
+      toggleInfoModal,
+      aktiveFriend,
+      setAktiveFriendFunc,
     }),
     [
       toggleTheme,
@@ -90,6 +107,10 @@ export default function App() {
       friendArray,
       addFriend,
       removeFriend,
+      showInfoModal,
+      toggleInfoModal,
+      aktiveFriend,
+      setAktiveFriendFunc,
     ]
   );
 

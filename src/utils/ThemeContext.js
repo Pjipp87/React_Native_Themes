@@ -10,4 +10,8 @@ export const PreferencesContext = React.createContext({
   friendArray: [],
   addFriend: () => {},
   removeFriend: () => {},
+  showInfoModal: false,
+  toogleInfoModal: () => {},
+  ativeFriend: null,
+  setAktiveFriendFunc: () => {},
 });
