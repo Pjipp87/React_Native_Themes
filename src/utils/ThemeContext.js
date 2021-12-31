@@ -9,4 +9,5 @@ export const PreferencesContext = React.createContext({
   toggleMessage: () => {},
   friendArray: [],
   addFriend: () => {},
+  removeFriend: () => {},
 });

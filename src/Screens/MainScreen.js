@@ -15,9 +15,14 @@ export const MainScreen = ({ scene }) => {
   const [visibleBanner, setVisibleBanner] = React.useState(false);
   const [isLoading, setisLoading] = useState(true);
   const [friendsSuggestion, setfriendsSuggestion] = useState([]);
-  const { friendArray, addFriend } = React.useContext(PreferencesContext);
+  const { removeFriend, addFriend, friendArray } =
+    React.useContext(PreferencesContext);
+  const [tempItem, setTempItem] = useState(null);
 
-  const onToggleSnackBar = () => setVisibleSnackbar(!visibleSnackbar);
+  const onToggleSnackBar = (item) => {
+    setVisibleSnackbar(!visibleSnackbar);
+    setTempItem(item);
+  };
 
   const onDismissSnackBar = () => setVisibleSnackbar(false);
 
@@ -45,7 +50,7 @@ export const MainScreen = ({ scene }) => {
   }, []);
 
   const _onAdd = (item) => {
-    onToggleSnackBar();
+    onToggleSnackBar(item);
     addFriend(item);
     Vibration.vibrate(100);
   };
@@ -107,9 +112,7 @@ export const MainScreen = ({ scene }) => {
           onDismiss={onDismissSnackBar}
           action={{
             label: "Rückgängig",
-            onPress: () => {
-              alert("Rückganging gemacht!");
-            },
+            onPress: () => removeFriend(tempItem),
           }}
         >
           Kontakt hinzugefügt

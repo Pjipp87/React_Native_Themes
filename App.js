@@ -47,8 +47,22 @@ export default function App() {
   }, [gotMessage]);
 
   const addFriend = React.useCallback((item) => {
-    console.log("Vorher: ", friendArray);
+    //console.log("Vorher: ", friendArray);
     return setFriendArray((friendArray) => [...friendArray, item]);
+  });
+
+  const removeFriend = React.useCallback((tempItem) => {
+    const index = friendArray.findIndex(
+      (index) => index.login.uuid === tempItem.login.uuid
+    );
+    console.log("index", index);
+
+    let tempArray = friendArray;
+    console.log("anfang:", tempArray.length);
+    tempArray.splice(index, 1);
+    console.log("ende: ", tempArray.length);
+    console.log(tempArray);
+    return setFriendArray(tempArray);
   });
 
   const preferences = React.useMemo(
@@ -61,6 +75,7 @@ export default function App() {
       toggleMessage,
       friendArray,
       addFriend,
+      removeFriend,
     }),
     [
       toggleTheme,
@@ -71,6 +86,7 @@ export default function App() {
       toggleMessage,
       friendArray,
       addFriend,
+      removeFriend,
     ]
   );
 
