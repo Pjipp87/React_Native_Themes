@@ -30,7 +30,9 @@ export const MainScreen = ({ scene }) => {
 
   if (!isLogedIn) return <LoginModal />;
 
-  const _getRandomUser = async () => {
+  /**
+ * 
+ *   const _getRandomUser = async () => {
     try {
       const response = await fetch(
         "https://randomuser.me/api/?results=20&gender=male"
@@ -70,7 +72,7 @@ export const MainScreen = ({ scene }) => {
       console.error(error);
     }
   };
-   */
+  
 
   useEffect(() => {
     //_getQuote();
@@ -80,6 +82,7 @@ export const MainScreen = ({ scene }) => {
       setVisibleBanner(true);
     }, 1500);
   }, []);
+ */
 
   const _onAdd = (item, quote) => {
     Vibration.vibrate(100);
