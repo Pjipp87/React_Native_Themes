@@ -40,20 +40,22 @@ export const MainScreen = ({ scene }) => {
         "https://goquotes-api.herokuapp.com/api/v1/random?count=20"
       );
       const jsonQuote = await responseQuote.json();
-
       setQuotes(jsonQuote.quotes);
       setfriendsSuggestion(json.results);
-      for (let index = 0; index < friendsSuggestion.length; index++) {
-        const friend = friendsSuggestion[index];
-        const quote = quotes[index];
-        Object.assign(friend, quote);
-      }
-      console.log(friendsSuggestion);
-      setfriendsSuggestion(friendsSuggestion);
       setisLoading(false);
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const _mergeArrays = async () => {
+    for (let index = 0; index < friendsSuggestion.length; index++) {
+      const friend = friendsSuggestion[index];
+      const quote = quotes[index];
+      Object.assign(friend, quote);
+    }
+    console.log(friendsSuggestion);
+    setfriendsSuggestion(friendsSuggestion);
   };
 
   /**
@@ -73,6 +75,7 @@ export const MainScreen = ({ scene }) => {
   useEffect(() => {
     //_getQuote();
     _getRandomUser();
+    _mergeArrays();
     setTimeout(() => {
       setVisibleBanner(true);
     }, 1500);
