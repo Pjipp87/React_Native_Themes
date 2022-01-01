@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { Text, Surface, Avatar, IconButton } from "react-native-paper";
 import { Image } from "react-native";
@@ -6,7 +6,8 @@ import { Dimensions } from "react-native";
 import { PreferencesContext } from "../utils/ThemeContext";
 
 export const FriendListItem = ({ friend }) => {
-  const { name, dob, status, picture, email, dateOfBirth } = friend;
+  const { name, dob, picture, email, dateOfBirth } = friend;
+  const [status, setstatus] = useState("");
   const { toggleInfoModal, setAktiveFriendFunc } =
     React.useContext(PreferencesContext);
 
@@ -14,6 +15,23 @@ export const FriendListItem = ({ friend }) => {
     setAktiveFriendFunc(friend);
     toggleInfoModal();
   };
+
+  //https://api.quotable.io/random
+  const _getQuote = async () => {
+    try {
+      const response = await fetch("https://api.quotable.io/random");
+      const json = await response.json();
+      //console.log(json.results[0].name.first);
+      setstatus(json.content);
+      console.log(json);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    _getQuote();
+  }, []);
 
   const windowWidth = Dimensions.get("window").width;
   return (
@@ -51,9 +69,7 @@ export const FriendListItem = ({ friend }) => {
             </Text>
 
             <Text style={{ fontSize: 14, fontStyle: "italic" }}>{email}</Text>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-              Kein Status verfügbar
-            </Text>
+            <Text style={{ fontSize: 16 }}>{status}</Text>
           </View>
         </View>
         <IconButton
