@@ -16,7 +16,6 @@ export const FriendListItem = ({ friend }) => {
     toggleInfoModal();
   };
 
-  console.log(email);
   const windowWidth = Dimensions.get("window").width;
   return (
     <Surface
