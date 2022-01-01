@@ -15,9 +15,11 @@ export const MainScreen = ({ scene }) => {
   const [visibleBanner, setVisibleBanner] = React.useState(false);
   const [isLoading, setisLoading] = useState(true);
   const [friendsSuggestion, setfriendsSuggestion] = useState([]);
-  const { removeFriend, addFriend, friendArray } =
+  const { removeFriend, addFriend, friendArray, setAktiveFriendFunc } =
     React.useContext(PreferencesContext);
   const [tempItem, setTempItem] = useState(null);
+
+  const [quotes, setQuotes] = useState([]);
 
   const onToggleSnackBar = (item) => {
     setVisibleSnackbar(!visibleSnackbar);
@@ -31,25 +33,52 @@ export const MainScreen = ({ scene }) => {
   const _getRandomUser = async () => {
     try {
       const response = await fetch(
-        "https://randomuser.me/api/?results=50&gender=male"
+        "https://randomuser.me/api/?results=20&gender=male"
       );
       const json = await response.json();
-      //console.log(json.results[0].name.first);
+      const responseQuote = await fetch(
+        "https://goquotes-api.herokuapp.com/api/v1/random?count=20"
+      );
+      const jsonQuote = await responseQuote.json();
+
+      setQuotes(jsonQuote.quotes);
       setfriendsSuggestion(json.results);
+      for (let index = 0; index < friendsSuggestion.length; index++) {
+        const friend = friendsSuggestion[index];
+        const quote = quotes[index];
+        Object.assign(friend, quote);
+      }
+      console.log(friendsSuggestion);
+      setfriendsSuggestion(friendsSuggestion);
       setisLoading(false);
     } catch (error) {
       console.error(error);
     }
   };
 
+  /**
+   * const _getQuote = async () => {
+    try {
+      const responseQuote = await fetch(
+        "https://goquotes-api.herokuapp.com/api/v1/random?count=5"
+      );
+      const jsonQuote = await responseQuote.json();
+      setQuotes(jsonQuote.quotes);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+   */
+
   useEffect(() => {
+    //_getQuote();
     _getRandomUser();
     setTimeout(() => {
       setVisibleBanner(true);
     }, 1500);
   }, []);
 
-  const _onAdd = (item) => {
+  const _onAdd = (item, quote) => {
     Vibration.vibrate(100);
     if (
       friendArray.findIndex((index) => index.login.uuid === item.login.uuid) ===
@@ -57,19 +86,7 @@ export const MainScreen = ({ scene }) => {
     ) {
       onToggleSnackBar(item);
       addFriend(item);
-      //#######################
-      /**
- *       const index = friendsSuggestion.findIndex(
-        (index) => index.login.uuid === tempItem.login.uuid
-      );
-      let tempArray = friendsSuggestion;
-      tempArray.splice(index, 1);
-      return setfriendsSuggestion(
-        (friendsSuggestion) => [...friendsSuggestion],
-        tempArray
-      );
- */
-      //#######################
+      setAktiveFriendFunc(quote);
     } else {
       alert("Kontakt bereits hinzugefügt!");
     }

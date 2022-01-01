@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { FriendListItem } from "../components/FriendListItem";
 import { PreferencesContext } from "../utils/ThemeContext";
@@ -7,7 +7,7 @@ import { Text } from "react-native-paper";
 import { FriendInfoModal } from "../components/FriendInfoModal";
 
 export const FriendsScreen = () => {
-  const { friendArray, showInfoModal, toogleInfoModal } =
+  const { friendArray, showInfoModal, toogleInfoModal, quotes } =
     React.useContext(PreferencesContext);
 
   if (showInfoModal) return <FriendInfoModal />;

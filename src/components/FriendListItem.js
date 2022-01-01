@@ -6,8 +6,8 @@ import { Dimensions } from "react-native";
 import { PreferencesContext } from "../utils/ThemeContext";
 
 export const FriendListItem = ({ friend }) => {
-  const { name, dob, picture, email, dateOfBirth } = friend;
-  const [status, setstatus] = useState("");
+  const { name, dob, picture, email, text } = friend;
+
   const { toggleInfoModal, setAktiveFriendFunc } =
     React.useContext(PreferencesContext);
 
@@ -16,23 +16,7 @@ export const FriendListItem = ({ friend }) => {
     toggleInfoModal();
   };
 
-  //https://api.quotable.io/random
-  const _getQuote = async () => {
-    try {
-      const response = await fetch("https://api.quotable.io/random");
-      const json = await response.json();
-      //console.log(json.results[0].name.first);
-      setstatus(json.content);
-      console.log(json);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    _getQuote();
-  }, []);
-
+  console.log(email);
   const windowWidth = Dimensions.get("window").width;
   return (
     <Surface
@@ -69,7 +53,7 @@ export const FriendListItem = ({ friend }) => {
             </Text>
 
             <Text style={{ fontSize: 14, fontStyle: "italic" }}>{email}</Text>
-            <Text style={{ fontSize: 16 }}>{status}</Text>
+            <Text style={{ fontSize: 16 }}>{text}</Text>
           </View>
         </View>
         <IconButton
