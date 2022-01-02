@@ -1,0 +1,119 @@
+Index: App.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import { createBottomTabNavigator } from \"@react-navigation/bottom-tabs\";\r\nimport { MainScreen } from \"./src/Screens/MainScreen\";\r\nimport { SettingsScreen } from \"./src/Screens/SettingsScreen\";\r\nimport { FriendsScreen } from \"./src/Screens/FriendsScreen\";\r\nimport { MessageScreen } from \"./src/Screens/MessageScreen\";\r\nimport { NewsScreen } from \"./src/Screens/NewsScreen\";\r\nimport { useState } from \"react\";\r\nimport React from \"react\";\r\nimport {\r\n  NavigationContainer,\r\n  DarkTheme as NavigationDarkTheme,\r\n  DefaultTheme as NavigationDefaultTheme,\r\n} from \"@react-navigation/native\";\r\nimport {\r\n  DarkTheme as PaperDarkTheme,\r\n  DefaultTheme as PaperDefaultTheme,\r\n  Provider as PaperProvider,\r\n} from \"react-native-paper\";\r\nimport merge from \"deepmerge\";\r\nimport { PreferencesContext } from \"./src/utils/ThemeContext\";\r\nimport * as Icon from \"@expo/vector-icons\";\r\n\r\nconst CombinedDefaultTheme = merge(PaperDefaultTheme, NavigationDefaultTheme);\r\nconst CombinedDarkTheme = merge(PaperDarkTheme, NavigationDarkTheme);\r\n\r\nconst Tab = createBottomTabNavigator();\r\n\r\nexport default function App() {\r\n  const [isThemeDark, setIsThemeDark] = React.useState(false);\r\n  // TODO: isLogedIn wieder auf false setzen\r\n  const [isLogedIn, setIsLogedIn] = useState(true);\r\n  const [gotMessage, setGotMessage] = useState(true);\r\n  const [friendArray, setFriendArray] = useState([]);\r\n\r\n  let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;\r\n\r\n  const toggleTheme = React.useCallback(() => {\r\n    return setIsThemeDark(!isThemeDark);\r\n  }, [isThemeDark]);\r\n\r\n  const toggleLogin = React.useCallback(() => {\r\n    return setIsLogedIn(!isLogedIn);\r\n  }, [isLogedIn]);\r\n\r\n  const toggleMessage = React.useCallback(() => {\r\n    return setGotMessage(!gotMessage);\r\n  }, [gotMessage]);\r\n\r\n  const addFriend = React.useCallback((item) => {\r\n    console.log(\"Vorher: \", friendArray);\r\n    return setFriendArray((friendArray) => [...friendArray, item]);\r\n  });\r\n\r\n  const preferences = React.useMemo(\r\n    () => ({\r\n      toggleTheme,\r\n      isThemeDark,\r\n      isLogedIn,\r\n      toggleLogin,\r\n      gotMessage,\r\n      toggleMessage,\r\n      friendArray,\r\n      addFriend,\r\n    }),\r\n    [\r\n      toggleTheme,\r\n      isThemeDark,\r\n      isLogedIn,\r\n      toggleLogin,\r\n      gotMessage,\r\n      toggleMessage,\r\n      friendArray,\r\n      addFriend,\r\n    ]\r\n  );\r\n\r\n  return (\r\n    <PreferencesContext.Provider value={preferences}>\r\n      <PaperProvider theme={theme}>\r\n        <NavigationContainer theme={theme}>\r\n          <Tab.Navigator\r\n            screenOptions={({ route }) => ({\r\n              tabBarIcon: ({ focused, color, size }) => {\r\n                let iconName;\r\n\r\n                if (route.name === \"Startseite\") {\r\n                  //iconName = focused ? \"home\" : \"home-outline\";\r\n                  iconName = \"home\";\r\n                } else if (route.name === \"Neuigkeiten\") {\r\n                  //iconName = focused ? \"newspaper\" : \"newspaper-outline\";\r\n                  iconName = \"newspaper\";\r\n                } else if (route.name === \"Freunde\") {\r\n                  //iconName = focused ? \"newspaper\" : \"newspaper-outline\";\r\n                  iconName = \"user-friends\";\r\n                } else if (route.name === \"Nachrichten\") {\r\n                  //iconName = focused ? \"newspaper\" : \"newspaper-outline\";\r\n                  iconName = \"inbox\";\r\n                } else if (route.name === \"Einstellungen\") {\r\n                  //iconName = focused ? \"newspaper\" : \"newspaper-outline\";\r\n                  iconName = \"bars\";\r\n                }\r\n\r\n                // You can return any component that you like here!\r\n                return (\r\n                  <Icon.FontAwesome5\r\n                    name={iconName}\r\n                    size={size}\r\n                    color={color}\r\n                  />\r\n                );\r\n              },\r\n              tabBarActiveTintColor: \"tomato\",\r\n              tabBarInactiveTintColor: \"gray\",\r\n            })}\r\n          >\r\n            <Tab.Screen name=\"Startseite\" component={MainScreen} />\r\n            <Tab.Screen name=\"Neuigkeiten\" component={NewsScreen} />\r\n            <Tab.Screen name=\"Freunde\" component={FriendsScreen} />\r\n            <Tab.Screen\r\n              name=\"Nachrichten\"\r\n              component={MessageScreen}\r\n              options={gotMessage ? { tabBarBadge: 5 } : null}\r\n            />\r\n            <Tab.Screen name=\"Einstellungen\" component={SettingsScreen} />\r\n          </Tab.Navigator>\r\n        </NavigationContainer>\r\n      </PaperProvider>\r\n    </PreferencesContext.Provider>\r\n  );\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/App.js b/App.js
+--- a/App.js	(revision 6966745130e09945112a6cbbd5c6b196dc3607b0)
++++ b/App.js	(date 1640940964726)
+@@ -47,7 +47,6 @@
+   }, [gotMessage]);
+ 
+   const addFriend = React.useCallback((item) => {
+-    console.log("Vorher: ", friendArray);
+     return setFriendArray((friendArray) => [...friendArray, item]);
+   });
+ 
+Index: src/utils/ThemeContext.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from \"react\";\r\n\r\nexport const PreferencesContext = React.createContext({\r\n  toggleTheme: () => {},\r\n  isThemeDark: false,\r\n  isLogedIn: false,\r\n  toggleLogin: () => {},\r\n  gotMessage: true,\r\n  toggleMessage: () => {},\r\n  friendArray: [],\r\n  addFriend: () => {},\r\n});\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/utils/ThemeContext.js b/src/utils/ThemeContext.js
+--- a/src/utils/ThemeContext.js	(revision 6966745130e09945112a6cbbd5c6b196dc3607b0)
++++ b/src/utils/ThemeContext.js	(date 1640941001331)
+@@ -9,4 +9,5 @@
+   toggleMessage: () => {},
+   friendArray: [],
+   addFriend: () => {},
++
+ });
+Index: src/Screens/MainScreen.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, { useState, useEffect } from \"react\";\r\nimport { StyleSheet, View, FlatList } from \"react-native\";\r\nimport styled from \"styled-components\";\r\nimport { useTheme, Snackbar, ActivityIndicator } from \"react-native-paper\";\r\nimport { Button, Headline } from \"react-native-paper\";\r\nimport { Text, Banner } from \"react-native-paper\";\r\nimport { PreferencesContext } from \"../utils/ThemeContext\";\r\nimport { LoginModal } from \"../components/LoginModal\";\r\nimport { FriendSuggest } from \"../components/FriendSuggest\";\r\n\r\nexport const MainScreen = ({ scene }) => {\r\n  const { colors } = useTheme();\r\n  const { isLogedIn, toggleLogin } = React.useContext(PreferencesContext);\r\n  const [visibleSnackbar, setVisibleSnackbar] = React.useState(false);\r\n  const [visibleBanner, setVisibleBanner] = React.useState(false);\r\n  const [isLoading, setisLoading] = useState(true);\r\n  const [friendsSuggestion, setfriendsSuggestion] = useState([]);\r\n  const { friendArray, addFriend } = React.useContext(PreferencesContext);\r\n\r\n  const onToggleSnackBar = () => setVisibleSnackbar(!visibleSnackbar);\r\n\r\n  const onDismissSnackBar = () => setVisibleSnackbar(false);\r\n\r\n  if (!isLogedIn) return <LoginModal />;\r\n\r\n  const _getRandomUser = async () => {\r\n    try {\r\n      const response = await fetch(\r\n        \"https://randomuser.me/api/?results=50&gender=male\"\r\n      );\r\n      const json = await response.json();\r\n      //console.log(json.results[0].name.first);\r\n      setfriendsSuggestion(json.results);\r\n      setisLoading(false);\r\n    } catch (error) {\r\n      console.error(error);\r\n    }\r\n  };\r\n\r\n  useEffect(() => {\r\n    _getRandomUser();\r\n    setTimeout(() => {\r\n      setVisibleBanner(true);\r\n    }, 1500);\r\n  }, []);\r\n\r\n  const _onAdd = (item) => {\r\n    onToggleSnackBar();\r\n    addFriend(item);\r\n  };\r\n\r\n  const _refresh = () => {\r\n    setisLoading(true);\r\n    _getRandomUser();\r\n  };\r\n\r\n  if (isLoading) {\r\n    return (\r\n      <View style={{ flex: 1, justifyContent: \"center\", alignItems: \"center\" }}>\r\n        <ActivityIndicator animating={true} size={80} />\r\n      </View>\r\n    );\r\n  }\r\n\r\n  return (\r\n    <>\r\n      <Banner\r\n        visible={visibleBanner}\r\n        style={{ backgroundColor: colors.error }}\r\n        actions={[\r\n          {\r\n            label: \"Verstanden\",\r\n            onPress: () => setVisibleBanner(false),\r\n          },\r\n        ]}\r\n      >\r\n        Die App befindet sich aktuell in Entwicklung\r\n      </Banner>\r\n      <View style={{ flex: 1, justifyContent: \"center\", alignItems: \"center\" }}>\r\n        <Headline style={{ paddingVertical: 20, fontWeight: \"bold\" }}>\r\n          Kontaktvorschläge\r\n        </Headline>\r\n\r\n        <FlatList\r\n          data={friendsSuggestion}\r\n          renderItem={({ item }) => (\r\n            <FriendSuggest friend={item} onAdd={() => _onAdd(item)} />\r\n          )}\r\n          keyExtractor={(item) => item.login.uuid}\r\n          refreshing={isLoading}\r\n          onRefresh={() => _refresh()}\r\n        />\r\n\r\n        <Button\r\n          mode=\"contained\"\r\n          compact={true}\r\n          icon=\"home\"\r\n          onPress={() => toggleLogin()}\r\n        >\r\n          Logout\r\n        </Button>\r\n\r\n        <Snackbar\r\n          duration={3000}\r\n          visible={visibleSnackbar}\r\n          onDismiss={onDismissSnackBar}\r\n          action={{\r\n            label: \"Rückgängig\",\r\n            onPress: () => {\r\n              alert(\"Rückganging gemacht!\");\r\n            },\r\n          }}\r\n        >\r\n          Kontakt hinzugefügt\r\n        </Snackbar>\r\n      </View>\r\n    </>\r\n  );\r\n};\r\n\r\nconst styles = StyleSheet.create({});\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Screens/MainScreen.js b/src/Screens/MainScreen.js
+--- a/src/Screens/MainScreen.js	(revision 6966745130e09945112a6cbbd5c6b196dc3607b0)
++++ b/src/Screens/MainScreen.js	(date 1640940886812)
+@@ -1,5 +1,5 @@
+ import React, { useState, useEffect } from "react";
+-import { StyleSheet, View, FlatList } from "react-native";
++import { StyleSheet, View, FlatList, Vibration } from "react-native";
+ import styled from "styled-components";
+ import { useTheme, Snackbar, ActivityIndicator } from "react-native-paper";
+ import { Button, Headline } from "react-native-paper";
+@@ -47,6 +47,7 @@
+   const _onAdd = (item) => {
+     onToggleSnackBar();
+     addFriend(item);
++    Vibration.vibrate(100)
+   };
+ 
+   const _refresh = () => {
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"6fbda91d-188d-4e76-94ce-76382c5c44a9\" name=\"Changes\" comment=\"\">\r\n      <change afterPath=\"$PROJECT_DIR$/.expo-shared/assets.json\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/.gitignore\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/App.js\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app.json\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/assets/adaptive-icon.png\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/assets/favicon.png\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/assets/icon.png\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/assets/splash.png\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/babel.config.js\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/package.json\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ComposerSettings\">\r\n    <execution />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"22pEfsDk7fBJYHcmU1xStrTccEp\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">\r\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\r\n    <property name=\"RunOnceActivity.ShowReadmeOnStart\" value=\"true\" />\r\n    <property name=\"WebServerToolWindowFactoryState\" value=\"false\" />\r\n    <property name=\"last_opened_file_path\" value=\"$PROJECT_DIR$\" />\r\n    <property name=\"nodejs_package_manager_path\" value=\"yarn\" />\r\n    <property name=\"vue.rearranger.settings.migration\" value=\"true\" />\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"6fbda91d-188d-4e76-94ce-76382c5c44a9\" name=\"Changes\" comment=\"\" />\r\n      <created>1640526235605</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1640526235605</updated>\r\n      <workItem from=\"1640526237320\" duration=\"163000\" />\r\n      <workItem from=\"1640689992203\" duration=\"57000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 6966745130e09945112a6cbbd5c6b196dc3607b0)
++++ b/.idea/workspace.xml	(date 1640941001366)
+@@ -2,16 +2,10 @@
+ <project version="4">
+   <component name="ChangeListManager">
+     <list default="true" id="6fbda91d-188d-4e76-94ce-76382c5c44a9" name="Changes" comment="">
+-      <change afterPath="$PROJECT_DIR$/.expo-shared/assets.json" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/assets/adaptive-icon.png" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/assets/favicon.png" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/assets/icon.png" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/assets/splash.png" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/babel.config.js" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/Screens/MainScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Screens/MainScreen.js" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/utils/ThemeContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/ThemeContext.js" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -24,6 +18,9 @@
+   <component name="Git.Settings">
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
++  <component name="MarkdownSettingsMigration">
++    <option name="stateVersion" value="1" />
++  </component>
+   <component name="ProjectId" id="22pEfsDk7fBJYHcmU1xStrTccEp" />
+   <component name="ProjectViewState">
+     <option name="hideEmptyMiddlePackages" value="true" />
+@@ -35,6 +32,7 @@
+     <property name="WebServerToolWindowFactoryState" value="false" />
+     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+     <property name="nodejs_package_manager_path" value="yarn" />
++    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+     <property name="vue.rearranger.settings.migration" value="true" />
+   </component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+@@ -47,6 +45,10 @@
+       <updated>1640526235605</updated>
+       <workItem from="1640526237320" duration="163000" />
+       <workItem from="1640689992203" duration="57000" />
++      <workItem from="1640935980726" duration="320000" />
++      <workItem from="1640936313143" duration="12000" />
++      <workItem from="1640936339869" duration="639000" />
++      <workItem from="1640937188596" duration="1268000" />
+     </task>
+     <servers />
+   </component>

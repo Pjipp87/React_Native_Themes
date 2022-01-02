@@ -59,14 +59,13 @@ export default function App() {
     const index = friendArray.findIndex(
       (index) => index.login.uuid === tempItem.login.uuid
     );
-    console.log("index", index);
+
 
     let tempArray = friendArray;
     setFriendArray();
-    console.log("anfang:", tempArray.length);
+
     tempArray.splice(index, 1);
-    console.log("ende: ", tempArray.length);
-    console.log(tempArray);
+
     const newArray = tempArray;
     setFriendArray(tempArray);
     return setFriendArray((friendArray) => [...friendArray], newArray);

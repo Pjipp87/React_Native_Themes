@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View, Vibration } from "react-native";
 import { Text, Surface, Avatar, IconButton } from "react-native-paper";
 import { Image } from "react-native";
 import { Dimensions } from "react-native";
@@ -12,6 +12,7 @@ export const FriendListItem = ({ friend }) => {
     React.useContext(PreferencesContext);
 
   const _showInfo = () => {
+      Vibration.vibrate(50)
     setAktiveFriendFunc(friend);
     toggleInfoModal();
   };

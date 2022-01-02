@@ -1,0 +1,110 @@
+Index: App.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import { createBottomTabNavigator } from \"@react-navigation/bottom-tabs\";\r\nimport { MainScreen } from \"./src/Screens/MainScreen\";\r\nimport { SettingsScreen } from \"./src/Screens/SettingsScreen\";\r\nimport { FriendsScreen } from \"./src/Screens/FriendsScreen\";\r\nimport { MessageScreen } from \"./src/Screens/MessageScreen\";\r\nimport { NewsScreen } from \"./src/Screens/NewsScreen\";\r\nimport { useState } from \"react\";\r\nimport React from \"react\";\r\nimport {\r\n  NavigationContainer,\r\n  DarkTheme as NavigationDarkTheme,\r\n  DefaultTheme as NavigationDefaultTheme,\r\n} from \"@react-navigation/native\";\r\nimport {\r\n  DarkTheme as PaperDarkTheme,\r\n  DefaultTheme as PaperDefaultTheme,\r\n  Provider as PaperProvider,\r\n} from \"react-native-paper\";\r\nimport merge from \"deepmerge\";\r\nimport { PreferencesContext } from \"./src/utils/ThemeContext\";\r\nimport * as Icon from \"@expo/vector-icons\";\r\n\r\nconst CombinedDefaultTheme = merge(PaperDefaultTheme, NavigationDefaultTheme);\r\nconst CombinedDarkTheme = merge(PaperDarkTheme, NavigationDarkTheme);\r\n\r\nconst Tab = createBottomTabNavigator();\r\n\r\nexport default function App() {\r\n  const [isThemeDark, setIsThemeDark] = React.useState(false);\r\n  // TODO: isLogedIn wieder auf false setzen\r\n  const [isLogedIn, setIsLogedIn] = useState(true);\r\n  const [gotMessage, setGotMessage] = useState(true);\r\n  const [friendArray, setFriendArray] = useState([]);\r\n\r\n  let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;\r\n\r\n  const toggleTheme = React.useCallback(() => {\r\n    return setIsThemeDark(!isThemeDark);\r\n  }, [isThemeDark]);\r\n\r\n  const toggleLogin = React.useCallback(() => {\r\n    return setIsLogedIn(!isLogedIn);\r\n  }, [isLogedIn]);\r\n\r\n  const toggleMessage = React.useCallback(() => {\r\n    return setGotMessage(!gotMessage);\r\n  }, [gotMessage]);\r\n\r\n  const addFriend = React.useCallback((item) => {\r\n    console.log(\"Vorher: \", friendArray);\r\n    return setFriendArray((friendArray) => [...friendArray, item]);\r\n  });\r\n\r\n  const preferences = React.useMemo(\r\n    () => ({\r\n      toggleTheme,\r\n      isThemeDark,\r\n      isLogedIn,\r\n      toggleLogin,\r\n      gotMessage,\r\n      toggleMessage,\r\n      friendArray,\r\n      addFriend,\r\n    }),\r\n    [\r\n      toggleTheme,\r\n      isThemeDark,\r\n      isLogedIn,\r\n      toggleLogin,\r\n      gotMessage,\r\n      toggleMessage,\r\n      friendArray,\r\n      addFriend,\r\n    ]\r\n  );\r\n\r\n  return (\r\n    <PreferencesContext.Provider value={preferences}>\r\n      <PaperProvider theme={theme}>\r\n        <NavigationContainer theme={theme}>\r\n          <Tab.Navigator\r\n            screenOptions={({ route }) => ({\r\n              tabBarIcon: ({ focused, color, size }) => {\r\n                let iconName;\r\n\r\n                if (route.name === \"Startseite\") {\r\n                  //iconName = focused ? \"home\" : \"home-outline\";\r\n                  iconName = \"home\";\r\n                } else if (route.name === \"Neuigkeiten\") {\r\n                  //iconName = focused ? \"newspaper\" : \"newspaper-outline\";\r\n                  iconName = \"newspaper\";\r\n                } else if (route.name === \"Freunde\") {\r\n                  //iconName = focused ? \"newspaper\" : \"newspaper-outline\";\r\n                  iconName = \"user-friends\";\r\n                } else if (route.name === \"Nachrichten\") {\r\n                  //iconName = focused ? \"newspaper\" : \"newspaper-outline\";\r\n                  iconName = \"inbox\";\r\n                } else if (route.name === \"Einstellungen\") {\r\n                  //iconName = focused ? \"newspaper\" : \"newspaper-outline\";\r\n                  iconName = \"bars\";\r\n                }\r\n\r\n                // You can return any component that you like here!\r\n                return (\r\n                  <Icon.FontAwesome5\r\n                    name={iconName}\r\n                    size={size}\r\n                    color={color}\r\n                  />\r\n                );\r\n              },\r\n              tabBarActiveTintColor: \"tomato\",\r\n              tabBarInactiveTintColor: \"gray\",\r\n            })}\r\n          >\r\n            <Tab.Screen name=\"Startseite\" component={MainScreen} />\r\n            <Tab.Screen name=\"Neuigkeiten\" component={NewsScreen} />\r\n            <Tab.Screen name=\"Freunde\" component={FriendsScreen} />\r\n            <Tab.Screen\r\n              name=\"Nachrichten\"\r\n              component={MessageScreen}\r\n              options={gotMessage ? { tabBarBadge: 5 } : null}\r\n            />\r\n            <Tab.Screen name=\"Einstellungen\" component={SettingsScreen} />\r\n          </Tab.Navigator>\r\n        </NavigationContainer>\r\n      </PaperProvider>\r\n    </PreferencesContext.Provider>\r\n  );\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/App.js b/App.js
+--- a/App.js	(revision 33411b112a843c75e08ba77b9981b4681e20c985)
++++ b/App.js	(date 1640941095857)
+@@ -47,7 +47,6 @@
+   }, [gotMessage]);
+ 
+   const addFriend = React.useCallback((item) => {
+-    console.log("Vorher: ", friendArray);
+     return setFriendArray((friendArray) => [...friendArray, item]);
+   });
+ 
+Index: src/utils/ThemeContext.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from \"react\";\r\n\r\nexport const PreferencesContext = React.createContext({\r\n  toggleTheme: () => {},\r\n  isThemeDark: false,\r\n  isLogedIn: false,\r\n  toggleLogin: () => {},\r\n  gotMessage: true,\r\n  toggleMessage: () => {},\r\n  friendArray: [],\r\n  addFriend: () => {},\r\n});\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/utils/ThemeContext.js b/src/utils/ThemeContext.js
+--- a/src/utils/ThemeContext.js	(revision 33411b112a843c75e08ba77b9981b4681e20c985)
++++ b/src/utils/ThemeContext.js	(date 1640941095933)
+@@ -9,4 +9,5 @@
+   toggleMessage: () => {},
+   friendArray: [],
+   addFriend: () => {},
++
+ });
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"6fbda91d-188d-4e76-94ce-76382c5c44a9\" name=\"Changes\" comment=\"\">\r\n      <change afterPath=\"$PROJECT_DIR$/.expo-shared/assets.json\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/.gitignore\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/App.js\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app.json\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/assets/adaptive-icon.png\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/assets/favicon.png\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/assets/icon.png\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/assets/splash.png\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/babel.config.js\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/package.json\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ComposerSettings\">\r\n    <execution />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"22pEfsDk7fBJYHcmU1xStrTccEp\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">\r\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\r\n    <property name=\"RunOnceActivity.ShowReadmeOnStart\" value=\"true\" />\r\n    <property name=\"WebServerToolWindowFactoryState\" value=\"false\" />\r\n    <property name=\"last_opened_file_path\" value=\"$PROJECT_DIR$\" />\r\n    <property name=\"nodejs_package_manager_path\" value=\"yarn\" />\r\n    <property name=\"vue.rearranger.settings.migration\" value=\"true\" />\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"6fbda91d-188d-4e76-94ce-76382c5c44a9\" name=\"Changes\" comment=\"\" />\r\n      <created>1640526235605</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1640526235605</updated>\r\n      <workItem from=\"1640526237320\" duration=\"163000\" />\r\n      <workItem from=\"1640689992203\" duration=\"57000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 33411b112a843c75e08ba77b9981b4681e20c985)
++++ b/.idea/workspace.xml	(date 1640941108651)
+@@ -2,16 +2,9 @@
+ <project version="4">
+   <component name="ChangeListManager">
+     <list default="true" id="6fbda91d-188d-4e76-94ce-76382c5c44a9" name="Changes" comment="">
+-      <change afterPath="$PROJECT_DIR$/.expo-shared/assets.json" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/assets/adaptive-icon.png" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/assets/favicon.png" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/assets/icon.png" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/assets/splash.png" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/babel.config.js" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/utils/ThemeContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/ThemeContext.js" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -23,6 +16,9 @@
+   </component>
+   <component name="Git.Settings">
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
++  </component>
++  <component name="MarkdownSettingsMigration">
++    <option name="stateVersion" value="1" />
+   </component>
+   <component name="ProjectId" id="22pEfsDk7fBJYHcmU1xStrTccEp" />
+   <component name="ProjectViewState">
+@@ -35,6 +31,7 @@
+     <property name="WebServerToolWindowFactoryState" value="false" />
+     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+     <property name="nodejs_package_manager_path" value="yarn" />
++    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+     <property name="vue.rearranger.settings.migration" value="true" />
+   </component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+@@ -47,10 +44,26 @@
+       <updated>1640526235605</updated>
+       <workItem from="1640526237320" duration="163000" />
+       <workItem from="1640689992203" duration="57000" />
++      <workItem from="1640935980726" duration="320000" />
++      <workItem from="1640936313143" duration="12000" />
++      <workItem from="1640936339869" duration="639000" />
++      <workItem from="1640937188596" duration="1268000" />
++      <workItem from="1640941074783" duration="34000" />
+     </task>
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+     <option name="version" value="3" />
+   </component>
++  <component name="Vcs.Log.Tabs.Properties">
++    <option name="TAB_STATES">
++      <map>
++        <entry key="MAIN">
++          <value>
++            <State />
++          </value>
++        </entry>
++      </map>
++    </option>
++  </component>
+ </project>
+\ No newline at end of file

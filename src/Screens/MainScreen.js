@@ -20,7 +20,7 @@ export const MainScreen = ({ scene }) => {
     React.useContext(PreferencesContext);
   const [tempItem, setTempItem] = useState(null);
 
-  const [quotes, setQuotes] = useState([]);
+
 
   const onToggleSnackBar = (item) => {
     setVisibleSnackbar(!visibleSnackbar);
@@ -75,7 +75,7 @@ export const MainScreen = ({ scene }) => {
 
   const _refresh = () => {
     setisLoading(true);
-    _getRandomUser();
+    _getApiResponse();
   };
 
   if (isLoading) {
