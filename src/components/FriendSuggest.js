@@ -17,10 +17,10 @@ export const FriendSuggest = ({ friend, onAdd }) => {
       style={{
         marginVertical: 5,
         marginHorizontal: 5,
-        paddingLeft: 20,
         width: windowWidth * 0.95,
         flex: 1,
         paddingVertical: 15,
+        paddingHorizontal: 20,
         flexDirection: "row",
         justifyContent: "space-between",
         elevation: 5,
@@ -32,18 +32,33 @@ export const FriendSuggest = ({ friend, onAdd }) => {
           uri: picture.large,
         }}
       />
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <View
           style={{
             width: "100%",
             flexDirection: "row",
-            justifyContent: "space-evenly",
+            justifyContent: "flex-end",
             alignItems: "center",
           }}
         >
-          <Title style={{ fontSize: 20, fontWeight: "bold" }}>
+          <Title
+            style={{
+              flex: 1,
+              paddingLeft: 25,
+              fontSize: 20,
+              fontWeight: "bold",
+              textAlign: "left",
+            }}
+          >
             {name.first} {name.last}
           </Title>
+
           <IconButton icon="account-plus" size={35} onPress={onAdd} />
         </View>
       </View>

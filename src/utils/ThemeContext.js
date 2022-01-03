@@ -14,6 +14,4 @@ export const PreferencesContext = React.createContext({
   toogleInfoModal: () => {},
   ativeFriend: null,
   setAktiveFriendFunc: () => {},
-  quotes: [],
-  setQuotes: () => {},
 });

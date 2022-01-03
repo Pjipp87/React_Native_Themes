@@ -33,7 +33,6 @@ export default function App() {
   const [friendArray, setFriendArray] = useState([]);
   const [showInfoModal, setshowInfoModal] = useState(false);
   const [aktiveFriend, setAktiveFriend] = useState(null);
-  const [quotes, setQuotes] = useState([]);
 
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
 
@@ -59,13 +58,9 @@ export default function App() {
     const index = friendArray.findIndex(
       (index) => index.login.uuid === tempItem.login.uuid
     );
-
-
     let tempArray = friendArray;
     setFriendArray();
-
     tempArray.splice(index, 1);
-
     const newArray = tempArray;
     setFriendArray(tempArray);
     return setFriendArray((friendArray) => [...friendArray], newArray);
@@ -82,10 +77,6 @@ export default function App() {
     [aktiveFriend]
   );
 
-  const setQutesFunc = React.useCallback(() => {
-    return setQuotes(item);
-  });
-
   const preferences = React.useMemo(
     () => ({
       toggleTheme,
@@ -101,8 +92,6 @@ export default function App() {
       toggleInfoModal,
       aktiveFriend,
       setAktiveFriendFunc,
-      quotes,
-      setQuotes,
     }),
     [
       toggleTheme,
@@ -118,8 +107,6 @@ export default function App() {
       toggleInfoModal,
       aktiveFriend,
       setAktiveFriendFunc,
-      quotes,
-      setQuotes,
     ]
   );
 

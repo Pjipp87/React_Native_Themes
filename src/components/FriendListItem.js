@@ -12,7 +12,7 @@ export const FriendListItem = ({ friend }) => {
     React.useContext(PreferencesContext);
 
   const _showInfo = () => {
-      Vibration.vibrate(50)
+    Vibration.vibrate(50);
     setAktiveFriendFunc(friend);
     toggleInfoModal();
   };
@@ -30,7 +30,7 @@ export const FriendListItem = ({ friend }) => {
     >
       <View
         style={{
-          paddingHorizontal: 20,
+          paddingHorizontal: 15,
           flex: 1,
           paddingVertical: 15,
           flexDirection: "row",
@@ -47,13 +47,17 @@ export const FriendListItem = ({ friend }) => {
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
-          <View>
+          <View style={{ paddingLeft: 20 }}>
             <Text style={{ fontSize: 24, fontWeight: "bold" }}>
               {name.first} {name.last}
             </Text>
 
-            <Text style={{ fontSize: 14, fontStyle: "italic" }}>{email}</Text>
-            <Text style={{ fontSize: 16 }}>{text}</Text>
+            <Text
+              style={{ fontSize: 14, fontStyle: "italic", marginVertical: 5 }}
+            >
+              {email}
+            </Text>
+            <Text style={{ fontSize: 16, textAlign: "center" }}>{text}</Text>
           </View>
         </View>
         <IconButton

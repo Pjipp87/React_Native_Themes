@@ -20,8 +20,6 @@ export const MainScreen = ({ scene }) => {
     React.useContext(PreferencesContext);
   const [tempItem, setTempItem] = useState(null);
 
-
-
   const onToggleSnackBar = (item) => {
     setVisibleSnackbar(!visibleSnackbar);
     setTempItem(item);
@@ -59,7 +57,7 @@ export const MainScreen = ({ scene }) => {
     }, 1500);
   }, []);
 
-  const _onAdd = (item, quote) => {
+  const _onAdd = (item) => {
     Vibration.vibrate(100);
     if (
       friendArray.findIndex((index) => index.login.uuid === item.login.uuid) ===
@@ -67,7 +65,12 @@ export const MainScreen = ({ scene }) => {
     ) {
       onToggleSnackBar(item);
       addFriend(item);
-      setAktiveFriendFunc(quote);
+      setAktiveFriendFunc(item);
+      if (friendsSuggestion.length !== 0) {
+        let tempArray = friendsSuggestion;
+        tempArray.splice(tempArray.indexOf(item), 1);
+        setfriendsSuggestion(tempArray);
+      }
     } else {
       alert("Kontakt bereits hinzugefügt!");
     }
@@ -90,7 +93,7 @@ export const MainScreen = ({ scene }) => {
     <>
       <Banner
         visible={visibleBanner}
-        style={{ backgroundColor: colors.error }}
+        style={{ backgroundColor: colors.notification }}
         actions={[
           {
             label: "Verstanden",
