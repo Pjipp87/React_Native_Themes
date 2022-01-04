@@ -8,6 +8,7 @@ import { PreferencesContext } from "../utils/ThemeContext";
 import { LoginModal } from "../components/LoginModal";
 import { FriendSuggest } from "../components/FriendSuggest";
 import axios, { Axios } from "axios";
+import * as Device from "expo-device";
 
 export const MainScreen = ({ scene }) => {
   const { colors } = useTheme();
@@ -132,6 +133,10 @@ export const MainScreen = ({ scene }) => {
         Die App befindet sich aktuell in Entwicklung
       </Banner>
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>Smartphonename: {Device.deviceName}</Text>
+        <Text>Hersteller: {Device.brand}</Text>
+        <Text>Model: {Device.modelName}</Text>
+
         <Headline style={{ paddingVertical: 20, fontWeight: "bold" }}>
           Kontaktvorschläge
         </Headline>
