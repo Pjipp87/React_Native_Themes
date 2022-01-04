@@ -125,7 +125,7 @@ export default function App() {
                 } else if (route.name === "Neuigkeiten") {
                   //iconName = focused ? "newspaper" : "newspaper-outline";
                   iconName = "newspaper";
-                } else if (route.name === "Freunde") {
+                } else if (route.name === "Kontakte") {
                   //iconName = focused ? "newspaper" : "newspaper-outline";
                   iconName = "user-friends";
                 } else if (route.name === "Nachrichten") {
@@ -151,7 +151,7 @@ export default function App() {
           >
             <Tab.Screen name="Startseite" component={MainScreen} />
             <Tab.Screen name="Neuigkeiten" component={NewsScreen} />
-            <Tab.Screen name="Freunde" component={FriendsScreen} />
+            <Tab.Screen name="Kontakte" component={FriendsScreen} />
             <Tab.Screen
               name="Nachrichten"
               component={MessageScreen}

@@ -12,6 +12,16 @@ export const FriendsScreen = () => {
 
   if (showInfoModal) return <FriendInfoModal />;
 
+  if (friendArray.length === 0) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ fontSize: 36, fontStyle: "italic" }}>
+          Noch keine Kontakte
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <FlatList

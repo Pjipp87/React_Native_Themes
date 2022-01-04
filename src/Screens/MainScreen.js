@@ -81,13 +81,41 @@ export const MainScreen = ({ scene }) => {
     _getApiResponse();
   };
 
-  if (isLoading) {
+  const LoadingScreen = () => {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator animating={true} size={80} />
       </View>
     );
-  }
+  };
+
+  const SuggestionList = () => {
+    return (
+      <>
+        <FlatList
+          data={friendsSuggestion}
+          renderItem={({ item }) => (
+            <FriendSuggest friend={item} onAdd={() => _onAdd(item)} />
+          )}
+          keyExtractor={(item) => item.login.uuid}
+          refreshing={isLoading}
+          onRefresh={() => _refresh()}
+        />
+
+        <Snackbar
+          duration={3000}
+          visible={visibleSnackbar}
+          onDismiss={onDismissSnackBar}
+          action={{
+            label: "Rückgängig",
+            onPress: () => removeFriend(tempItem),
+          }}
+        >
+          Kontakt hinzugefügt
+        </Snackbar>
+      </>
+    );
+  };
 
   return (
     <>
@@ -107,17 +135,7 @@ export const MainScreen = ({ scene }) => {
         <Headline style={{ paddingVertical: 20, fontWeight: "bold" }}>
           Kontaktvorschläge
         </Headline>
-
-        <FlatList
-          data={friendsSuggestion}
-          renderItem={({ item }) => (
-            <FriendSuggest friend={item} onAdd={() => _onAdd(item)} />
-          )}
-          keyExtractor={(item) => item.login.uuid}
-          refreshing={isLoading}
-          onRefresh={() => _refresh()}
-        />
-
+        {isLoading ? <LoadingScreen /> : <SuggestionList />}
         <Button
           mode="contained"
           compact={true}
@@ -126,18 +144,6 @@ export const MainScreen = ({ scene }) => {
         >
           Logout
         </Button>
-
-        <Snackbar
-          duration={3000}
-          visible={visibleSnackbar}
-          onDismiss={onDismissSnackBar}
-          action={{
-            label: "Rückgängig",
-            onPress: () => removeFriend(tempItem),
-          }}
-        >
-          Kontakt hinzugefügt
-        </Snackbar>
       </View>
     </>
   );
