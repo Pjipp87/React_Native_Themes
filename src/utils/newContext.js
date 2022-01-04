@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 export default function newContext() {
   return (
     <View>
-      <Text></Text>
+      <Text>neu</Text>
     </View>
   );
 }
