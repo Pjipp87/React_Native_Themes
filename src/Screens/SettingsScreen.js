@@ -29,4 +29,4 @@ export const SettingsScreen = ({ scene }) => {
 };
 
 const styles = StyleSheet.create({});
-//neuer Test
+// Neuer Commit
