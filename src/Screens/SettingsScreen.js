@@ -29,4 +29,8 @@ export const SettingsScreen = ({ scene }) => {
 };
 
 const styles = StyleSheet.create({});
+<<<<<<< HEAD
 //neuer Test
+=======
+//Test
+>>>>>>> 8a55ab8eaaa3f4cf20be31602b3c6566e8700bc9
