@@ -119,7 +119,7 @@ export default function App() {
     return (
       <Stack.Navigator>
         <Stack.Screen name="Profil" component={MainScreen} />
-        <Stack.Screen name="Register" component={RegisterComponent} />
+        <Stack.Screen name="Registrierung" component={RegisterComponent} />
       </Stack.Navigator>
     );
   }

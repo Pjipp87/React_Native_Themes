@@ -184,7 +184,7 @@ export const MainScreen = ({ scene, navigation, route }) => {
             </View>
           </View>
           <Button
-            onPress={() => navigation.navigate("Register")}
+            onPress={() => navigation.navigate("Registrierung")}
             style={{ paddingBottom: 20 }}
           >
             Profil ändern

@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { Text, Button, Avatar } from "react-native-paper";
+import { StyleSheet, View, useWindowDimensions } from "react-native";
+import { Text, Button, Avatar, TextInput } from "react-native-paper";
 import { PreferencesContext } from "../utils/ThemeContext";
 import * as ImagePicker from "expo-image-picker";
 
 export default function RegisterComponent() {
   //######################
   const [image, setImage] = useState(null);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setlastName] = useState("");
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
 
   //------
 
@@ -26,24 +30,91 @@ export default function RegisterComponent() {
     }
   };
   //#######################
+  const window = useWindowDimensions();
 
   return (
-    <View>
-      <Text>Register</Text>
-      <Text>ImagePicker</Text>
+    <View style={{ flex: 1, height: window.height }}>
+      <Text
+        style={{
+          fontSize: 30,
+          textAlign: "center",
+          fontWeight: "bold",
+          paddingVertical: 40,
+        }}
+      >
+        Neuer Benutzer
+      </Text>
+      <View style={{ paddingBottom: 20 }}>
+        <TextInput
+          label="Vorname"
+          value={firstName}
+          onChangeText={(firstname) => setFirstName(firstname)}
+        />
+        <TextInput
+          label="Nachname"
+          value={lastName}
+          onChangeText={(lastName) => setlastName(lastName)}
+        />
+
+        <TextInput
+          label="Benutzername"
+          value={userName}
+          onChangeText={(userName) => setUserName(userName)}
+        />
+        <TextInput
+          label="Password"
+          value={password}
+          secureTextEntry={true}
+          onChangeText={(password) => setPassword(password)}
+        />
+      </View>
       <View
         style={{ flex: 0 - 5, alignItems: "center", justifyContent: "center" }}
       >
-        <Button mode="contained" compact={true} onPress={pickImage}>
+        <Button
+          mode="contained"
+          compact={true}
+          onPress={pickImage}
+          style={{ marginBottom: 30 }}
+        >
           Pofilbild hochladen
         </Button>
         {image && (
           <Avatar.Image
             size={120}
-            style={{ marginHorizontal: 30 }}
+            style={{ marginHorizontal: 30, marginBottom: 40 }}
             source={{ uri: image }}
           />
         )}
+      </View>
+      <View>
+        <Text>Check:</Text>
+        <Text>
+          Name: {firstName} {lastName}
+        </Text>
+
+        <Text>Benutzername: {userName}</Text>
+      </View>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          position: "relative",
+          alignItems: "center",
+          width: window.width,
+          justifyContent: "space-around",
+        }}
+      >
+        <Button
+          mode="contained"
+          compact={true}
+          onPress={() => alert("Abbruch")}
+        >
+          Abbrechen
+        </Button>
+        <Button mode="contained" compact={true} onPress={() => alert("fertig")}>
+          Registrierung abschliessen
+        </Button>
       </View>
     </View>
   );
