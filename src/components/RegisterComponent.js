@@ -35,7 +35,7 @@ export default function RegisterComponent() {
         style={{ flex: 0 - 5, alignItems: "center", justifyContent: "center" }}
       >
         <Button mode="contained" compact={true} onPress={pickImage}>
-          Pick an image from camera roll
+          Pofilbild hochladen
         </Button>
         {image && (
           <Avatar.Image
