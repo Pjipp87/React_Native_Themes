@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, FlatList, Vibration } from "react-native";
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  Vibration,
+  ScrollView,
+  useWindowDimensions,
+} from "react-native";
 import styled from "styled-components";
 import { useTheme, Snackbar, ActivityIndicator } from "react-native-paper";
-import { Button, Headline } from "react-native-paper";
+import { Button, Headline, Avatar } from "react-native-paper";
 import { Text, Banner } from "react-native-paper";
 import { PreferencesContext } from "../utils/ThemeContext";
 import { LoginModal } from "../components/LoginModal";
@@ -25,6 +32,8 @@ export const MainScreen = ({ scene }) => {
     setVisibleSnackbar(!visibleSnackbar);
     setTempItem(item);
   };
+
+  const window = useWindowDimensions();
 
   const onDismissSnackBar = () => setVisibleSnackbar(false);
 
@@ -133,15 +142,62 @@ export const MainScreen = ({ scene }) => {
         Die App befindet sich aktuell in Entwicklung
       </Banner>
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>Smartphonename: {Device.deviceName}</Text>
-        <Text>Hersteller: {Device.brand}</Text>
-        <Text>Model: {Device.modelName}</Text>
+        <View>
+          <Headline
+            style={{
+              textAlign: "center",
+              paddingVertical: 30,
+              fontWeight: "bold",
+              letterSpacing: 3,
+              fontSize: 40,
+            }}
+          >
+            Profil
+          </Headline>
+          <View
+            style={{
+              width: window.width,
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              paddingBottom: 20,
+            }}
+          >
+            <Avatar.Image
+              size={120}
+              style={{ marginHorizontal: 30 }}
+              source={require("../../mock/Image/ImageMock.jpg")}
+            />
+            <View style={{ justifyContent: "space-evenly" }}>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                Smartphonename:
+              </Text>
+              <Text>{Device.deviceName}</Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                Hersteller:
+              </Text>
+              <Text>{Device.brand}</Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>Model:</Text>
+              <Text>{Device.modelName}</Text>
+            </View>
+          </View>
+          <Button onPress={() => alert("klappt")} style={{ paddingBottom: 20 }}>
+            Profil ändern
+          </Button>
+        </View>
 
         <Headline style={{ paddingVertical: 20, fontWeight: "bold" }}>
           Kontaktvorschläge
         </Headline>
         {isLoading ? <LoadingScreen /> : <SuggestionList />}
-        <Button
+      </View>
+    </>
+  );
+};
+
+const styles = StyleSheet.create({});
+
+/**
+ *         <Button
           mode="contained"
           compact={true}
           icon="home"
@@ -149,9 +205,4 @@ export const MainScreen = ({ scene }) => {
         >
           Logout
         </Button>
-      </View>
-    </>
-  );
-};
-
-const styles = StyleSheet.create({});
+ */
