@@ -19,11 +19,16 @@ import {
 import merge from "deepmerge";
 import { PreferencesContext } from "./src/utils/ThemeContext";
 import * as Icon from "@expo/vector-icons";
+import ViewComponent from "./src/components/ViewComponent";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { View } from "react-native-web";
+import RegisterComponent from "./src/components/RegisterComponent";
 
 const CombinedDefaultTheme = merge(PaperDefaultTheme, NavigationDefaultTheme);
 const CombinedDarkTheme = merge(PaperDarkTheme, NavigationDarkTheme);
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [isThemeDark, setIsThemeDark] = React.useState(false);
@@ -110,6 +115,15 @@ export default function App() {
     ]
   );
 
+  function Root() {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen name="Profil" component={MainScreen} />
+        <Stack.Screen name="Register" component={RegisterComponent} />
+      </Stack.Navigator>
+    );
+  }
+
   return (
     <PreferencesContext.Provider value={preferences}>
       <PaperProvider theme={theme}>
@@ -149,7 +163,11 @@ export default function App() {
               tabBarInactiveTintColor: "gray",
             })}
           >
-            <Tab.Screen name="Startseite" component={MainScreen} />
+            <Tab.Screen
+              name="Startseite"
+              options={{ headerShown: false }}
+              component={Root}
+            />
             <Tab.Screen name="Neuigkeiten" component={NewsScreen} />
             <Tab.Screen name="Kontakte" component={FriendsScreen} />
             <Tab.Screen

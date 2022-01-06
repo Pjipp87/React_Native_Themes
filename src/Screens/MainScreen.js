@@ -17,7 +17,7 @@ import { FriendSuggest } from "../components/FriendSuggest";
 import axios, { Axios } from "axios";
 import * as Device from "expo-device";
 
-export const MainScreen = ({ scene }) => {
+export const MainScreen = ({ scene, navigation, route }) => {
   const { colors } = useTheme();
   const { isLogedIn, toggleLogin } = React.useContext(PreferencesContext);
   const [visibleSnackbar, setVisibleSnackbar] = React.useState(false);
@@ -39,6 +39,7 @@ export const MainScreen = ({ scene }) => {
 
   if (!isLogedIn) return <LoginModal />;
 
+  // Fetch API
   const urls = [
     "https://goquotes-api.herokuapp.com/api/v1/random?count=20",
     "https://randomuser.me/api/?results=20&gender=male",
@@ -66,6 +67,8 @@ export const MainScreen = ({ scene }) => {
       setVisibleBanner(true);
     }, 1500);
   }, []);
+
+  //###################
 
   const _onAdd = (item) => {
     Vibration.vibrate(100);
@@ -180,7 +183,10 @@ export const MainScreen = ({ scene }) => {
               <Text>{Device.modelName}</Text>
             </View>
           </View>
-          <Button onPress={() => alert("klappt")} style={{ paddingBottom: 20 }}>
+          <Button
+            onPress={() => navigation.navigate("Register")}
+            style={{ paddingBottom: 20 }}
+          >
             Profil ändern
           </Button>
         </View>
