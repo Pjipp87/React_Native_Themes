@@ -38,6 +38,13 @@ export default function App() {
   const [friendArray, setFriendArray] = useState([]);
   const [showInfoModal, setshowInfoModal] = useState(false);
   const [aktiveFriend, setAktiveFriend] = useState(null);
+  const [userInformation, setsetuserInformation] = useState({
+    firstname: "",
+    lastname: "",
+    username: "",
+    password: "",
+    picture: "../../mock/Image/ProfilePicture.png",
+  });
 
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
 
@@ -58,6 +65,13 @@ export default function App() {
 
     //console.log("Vorher: ", friendArray);
   });
+
+  const setUserinformationFunc = React.useCallback(
+    (userObject) => {
+      return setsetuserInformation(userObject);
+    },
+    [userInformation]
+  );
 
   const removeFriend = React.useCallback((tempItem) => {
     const index = friendArray.findIndex(
@@ -97,6 +111,8 @@ export default function App() {
       toggleInfoModal,
       aktiveFriend,
       setAktiveFriendFunc,
+      userInformation,
+      setUserinformationFunc,
     }),
     [
       toggleTheme,
@@ -112,6 +128,8 @@ export default function App() {
       toggleInfoModal,
       aktiveFriend,
       setAktiveFriendFunc,
+      userInformation,
+      setUserinformationFunc,
     ]
   );
 

@@ -14,4 +14,12 @@ export const PreferencesContext = React.createContext({
   toogleInfoModal: () => {},
   ativeFriend: null,
   setAktiveFriendFunc: () => {},
+  userInformation: {
+    firstname: "",
+    lastname: "",
+    username: "",
+    password: "",
+    picture: "../../mock/Image/ProfilePicture.png",
+  },
+  setUserinformationFunc: () => {},
 });

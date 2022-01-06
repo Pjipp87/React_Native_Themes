@@ -24,8 +24,14 @@ export const MainScreen = ({ scene, navigation, route }) => {
   const [visibleBanner, setVisibleBanner] = React.useState(false);
   const [isLoading, setisLoading] = useState(true);
   const [friendsSuggestion, setfriendsSuggestion] = useState([]);
-  const { removeFriend, addFriend, friendArray, setAktiveFriendFunc } =
-    React.useContext(PreferencesContext);
+  const {
+    removeFriend,
+    addFriend,
+    friendArray,
+    setAktiveFriendFunc,
+    userInformation,
+  } = React.useContext(PreferencesContext);
+
   const [tempItem, setTempItem] = useState(null);
 
   const onToggleSnackBar = (item) => {
@@ -168,18 +174,22 @@ export const MainScreen = ({ scene, navigation, route }) => {
             <Avatar.Image
               size={120}
               style={{ marginHorizontal: 30 }}
-              source={require("../../mock/Image/ImageMock.jpg")}
+              source={{
+                uri: userInformation.image,
+              }}
             />
             <View style={{ justifyContent: "space-evenly" }}>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                Smartphonename:
+                Benutzername
               </Text>
-              <Text>{Device.deviceName}</Text>
+              <Text>{userInformation.userName}</Text>
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>Name</Text>
+              <Text>
+                {userInformation.firstName} {userInformation.lastName}
+              </Text>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                Hersteller:
+                Smartphone Model:
               </Text>
-              <Text>{Device.brand}</Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>Model:</Text>
               <Text>{Device.modelName}</Text>
             </View>
           </View>

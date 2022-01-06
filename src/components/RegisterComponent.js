@@ -1,16 +1,22 @@
 import React, { useState } from "react";
-import { StyleSheet, View, useWindowDimensions } from "react-native";
+import {
+  StyleSheet,
+  View,
+  useWindowDimensions,
+  ScrollView,
+} from "react-native";
 import { Text, Button, Avatar, TextInput } from "react-native-paper";
 import { PreferencesContext } from "../utils/ThemeContext";
 import * as ImagePicker from "expo-image-picker";
 
-export default function RegisterComponent() {
+export default function RegisterComponent({ navigation }) {
   //######################
   const [image, setImage] = useState(null);
   const [firstName, setFirstName] = useState("");
   const [lastName, setlastName] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const { setUserinformationFunc } = React.useContext(PreferencesContext);
 
   //------
 
@@ -32,8 +38,20 @@ export default function RegisterComponent() {
   //#######################
   const window = useWindowDimensions();
 
+  const _setUser = () => {
+    const userObject = {
+      firstName,
+      lastName,
+      userName,
+      image,
+      password,
+    };
+    setUserinformationFunc(userObject);
+    navigation.navigate("Profil");
+  };
+
   return (
-    <View style={{ flex: 1, height: window.height }}>
+    <ScrollView style={{ flex: 1, height: window.height }}>
       <Text
         style={{
           fontSize: 30,
@@ -112,11 +130,15 @@ export default function RegisterComponent() {
         >
           Abbrechen
         </Button>
-        <Button mode="contained" compact={true} onPress={() => alert("fertig")}>
+        <Button
+          mode="contained"
+          compact={true}
+          onPress={() => _setUser(firstName, lastName, userName, password)}
+        >
           Registrierung abschliessen
         </Button>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
