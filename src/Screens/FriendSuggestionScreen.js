@@ -18,7 +18,7 @@ import axios, { Axios } from "axios";
 import * as Device from "expo-device";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const MainScreen = ({ scene, navigation, route }) => {
+export const FriendSuggestionScreen = ({ scene, navigation, route }) => {
   const { colors } = useTheme();
   const { isLogedIn, toggleLogin } = React.useContext(PreferencesContext);
   const [visibleSnackbar, setVisibleSnackbar] = React.useState(false);
@@ -47,6 +47,28 @@ export const MainScreen = ({ scene, navigation, route }) => {
 
   if (!isLogedIn) return <LoginModal />;
 
+  // Fetch API
+  const urls = [
+    "https://goquotes-api.herokuapp.com/api/v1/random?count=20",
+    "https://randomuser.me/api/?results=20&gender=male",
+  ];
+
+  const _getApiResponse = async () => {
+    Promise.all(urls.map((endpoint) => axios.get(endpoint))).then(
+      axios.spread((...allData) => {
+        const quoteRes = allData[0].data.quotes;
+        const userRes = allData[1].data.results;
+        for (let index = 0; index < userRes.length; index++) {
+          const friend = userRes[index];
+          const quote = quoteRes[index];
+          Object.assign(friend, quote);
+        }
+        setfriendsSuggestion(userRes);
+        setisLoading(false);
+      })
+    );
+  };
+
   const _getUserData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("User");
@@ -70,7 +92,7 @@ export const MainScreen = ({ scene, navigation, route }) => {
 
   useEffect(() => {
     _getUserData();
-
+    _getApiResponse();
     setTimeout(() => {
       setVisibleBanner(true);
     }, 1500);
@@ -140,89 +162,14 @@ export const MainScreen = ({ scene, navigation, route }) => {
 
   return (
     <>
-      <Banner
-        visible={visibleBanner}
-        style={{ backgroundColor: colors.notification }}
-        actions={[
-          {
-            label: "Verstanden",
-            onPress: () => setVisibleBanner(false),
-          },
-        ]}
-      >
-        Die App befindet sich aktuell in Entwicklung
-      </Banner>
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <View>
-          <Headline
-            style={{
-              textAlign: "center",
-              paddingVertical: 30,
-              fontWeight: "bold",
-              letterSpacing: 3,
-              fontSize: 40,
-            }}
-          >
-            Profil
-          </Headline>
-          <View
-            style={{
-              width: window.width,
-              flexDirection: "row",
-              justifyContent: "flex-start",
-              paddingBottom: 20,
-            }}
-          >
-            <Avatar.Image
-              size={120}
-              style={{ marginHorizontal: 30 }}
-              source={{
-                uri: currentUserData.image,
-              }}
-            />
-            <View style={{ justifyContent: "space-evenly" }}>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                Benutzername
-              </Text>
-              <Text>{currentUserData.userName}</Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>Name</Text>
-              <Text>
-                {currentUserData.firstName} {currentUserData.lastName}
-              </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                Smartphone Model:
-              </Text>
-              <Text>{Device.modelName}</Text>
-            </View>
-          </View>
-          <Button
-            onPress={() => navigation.navigate("Registrierung")}
-            style={{ paddingBottom: 20 }}
-          >
-            Profil ändern
-          </Button>
-        </View>
+        <Headline style={{ paddingVertical: 20, fontWeight: "bold" }}>
+          Kontaktvorschläge
+        </Headline>
+        {isLoading ? <LoadingScreen /> : <SuggestionList />}
       </View>
     </>
   );
 };
 
 const styles = StyleSheet.create({});
-
-/**
- *         <Button
-          mode="contained"
-          compact={true}
-          icon="home"
-          onPress={() => toggleLogin()}
-        >
-          Logout
-        </Button>
- */
-
-/**
-         *  <Headline style={{ paddingVertical: 20, fontWeight: "bold" }}>
-          Kontaktvorschläge
-        </Headline>
-        {isLoading ? <LoadingScreen /> : <SuggestionList />}
-         */

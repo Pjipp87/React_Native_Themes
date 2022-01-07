@@ -25,6 +25,8 @@ import { View } from "react-native-web";
 import RegisterComponent from "./src/components/RegisterComponent";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { FriendSuggestionScreen } from "./src/Screens/FriendSuggestionScreen";
+
 const CombinedDefaultTheme = merge(PaperDefaultTheme, NavigationDefaultTheme);
 const CombinedDarkTheme = merge(PaperDarkTheme, NavigationDarkTheme);
 
@@ -168,6 +170,15 @@ export default function App() {
     );
   }
 
+  function Friends() {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen name="Freunde" component={FriendsScreen} />
+        <Stack.Screen name="Vorschläge" component={FriendSuggestionScreen} />
+      </Stack.Navigator>
+    );
+  }
+
   return (
     <PreferencesContext.Provider value={preferences}>
       <PaperProvider theme={theme}>
@@ -213,7 +224,11 @@ export default function App() {
               component={Root}
             />
             <Tab.Screen name="Neuigkeiten" component={NewsScreen} />
-            <Tab.Screen name="Kontakte" component={FriendsScreen} />
+            <Tab.Screen
+              name="Kontakte"
+              options={{ headerShown: false }}
+              component={Friends}
+            />
             <Tab.Screen
               name="Nachrichten"
               component={MessageScreen}
