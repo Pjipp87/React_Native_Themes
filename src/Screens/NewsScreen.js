@@ -71,9 +71,6 @@ export const NewsScreen = ({ scene, navigation, route }) => {
 
   useEffect(() => {
     _getApiResponse();
-    setTimeout(() => {
-      setVisibleBanner(true);
-    }, 1500);
   }, []);
 
   //###################
