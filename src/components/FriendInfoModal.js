@@ -10,6 +10,7 @@ import { FAB } from "react-native-paper";
 import { useState } from "react";
 import { Portal } from "react-native-paper";
 import { useIsFocused } from "@react-navigation/native";
+import { useEffect } from "react";
 
 export const FriendInfoModal = ({ scene }) => {
   const {
@@ -20,6 +21,7 @@ export const FriendInfoModal = ({ scene }) => {
     removeFriend,
   } = React.useContext(PreferencesContext);
   const { colors } = useTheme();
+  const [focus, setFocus] = useState(false);
 
   const createTwoButtonAlert = () =>
     Alert.alert(
@@ -35,6 +37,10 @@ export const FriendInfoModal = ({ scene }) => {
       ]
     );
 
+  useEffect(() => {
+    setFocus(!focus);
+  }, [isFocused]);
+
   const _openAlert = () => {
     Vibration.vibrate(100);
     createTwoButtonAlert();
@@ -43,6 +49,7 @@ export const FriendInfoModal = ({ scene }) => {
   const _closeModal = () => {
     // setAktiveFriendFunc(null);
     Vibration.vibrate(100);
+
     toggleInfoModal();
   };
 
@@ -50,6 +57,7 @@ export const FriendInfoModal = ({ scene }) => {
     Vibration.vibrate(100);
     removeFriend(aktiveFriend);
     //setAktiveFriendFunc(null);
+
     toggleInfoModal();
   };
 
@@ -140,7 +148,7 @@ export const FriendInfoModal = ({ scene }) => {
                 {
                   icon: "email",
                   label: "Nachricht senden",
-                  onPress: () => alert("Funtkcion noch nicht implementiert"),
+                  onPress: () => alert("Funktion noch nicht implementiert"),
                   small: false,
                   style: { backgroundColor: colors.accent },
                   color: colors.text,

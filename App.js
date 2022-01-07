@@ -170,15 +170,6 @@ export default function App() {
     );
   }
 
-  function Friends() {
-    return (
-      <Stack.Navigator>
-        <Stack.Screen name="Freunde" component={FriendsScreen} />
-        <Stack.Screen name="Vorschläge" component={FriendSuggestionScreen} />
-      </Stack.Navigator>
-    );
-  }
-
   return (
     <PreferencesContext.Provider value={preferences}>
       <PaperProvider theme={theme}>
@@ -224,11 +215,7 @@ export default function App() {
               component={Root}
             />
             <Tab.Screen name="Neuigkeiten" component={NewsScreen} />
-            <Tab.Screen
-              name="Kontakte"
-              options={{ headerShown: false }}
-              component={Friends}
-            />
+            <Tab.Screen name="Kontakte" component={FriendsScreen} />
             <Tab.Screen
               name="Nachrichten"
               component={MessageScreen}

@@ -17,6 +17,7 @@ import { FriendSuggest } from "../components/FriendSuggest";
 import axios, { Axios } from "axios";
 import * as Device from "expo-device";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 
 export const FriendSuggestionScreen = ({ scene, navigation, route }) => {
   const { colors } = useTheme();
@@ -47,8 +48,6 @@ export const FriendSuggestionScreen = ({ scene, navigation, route }) => {
 
   if (!isLogedIn) return <LoginModal />;
 
-  const isFocused = navigation.isFocused();
-
   // Fetch API
   const urls = [
     "https://goquotes-api.herokuapp.com/api/v1/random?count=20",
@@ -71,12 +70,10 @@ export const FriendSuggestionScreen = ({ scene, navigation, route }) => {
     );
   };
 
+  const isFocused = navigation.isFocused();
   useEffect(() => {
-    if (isFocused) {
-      _getApiResponse();
-    }
-  }, []);
-
+    isFocused ? _getApiResponse() : null;
+  }, [!isLoading]);
   //###################
 
   const _onAdd = (item) => {
