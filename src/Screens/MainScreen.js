@@ -16,6 +16,7 @@ import { LoginModal } from "../components/LoginModal";
 import { FriendSuggest } from "../components/FriendSuggest";
 import axios, { Axios } from "axios";
 import * as Device from "expo-device";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const MainScreen = ({ scene, navigation, route }) => {
   const { colors } = useTheme();
@@ -31,6 +32,7 @@ export const MainScreen = ({ scene, navigation, route }) => {
     setAktiveFriendFunc,
     userInformation,
   } = React.useContext(PreferencesContext);
+  const [currentUserData, setCurrentUserData] = useState({});
 
   const [tempItem, setTempItem] = useState(null);
 
@@ -67,8 +69,19 @@ export const MainScreen = ({ scene, navigation, route }) => {
     );
   };
 
+  const _getUserData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("User");
+      console.log("geklappt:", JSON.parse(jsonValue));
+      return setCurrentUserData(JSON.parse(jsonValue));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     _getApiResponse();
+    _getUserData();
     setTimeout(() => {
       setVisibleBanner(true);
     }, 1500);
@@ -175,17 +188,17 @@ export const MainScreen = ({ scene, navigation, route }) => {
               size={120}
               style={{ marginHorizontal: 30 }}
               source={{
-                uri: userInformation.image,
+                uri: currentUserData.image,
               }}
             />
             <View style={{ justifyContent: "space-evenly" }}>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
                 Benutzername
               </Text>
-              <Text>{userInformation.userName}</Text>
+              <Text>{currentUserData.userName}</Text>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>Name</Text>
               <Text>
-                {userInformation.firstName} {userInformation.lastName}
+                {currentUserData.firstName} {currentUserData.lastName}
               </Text>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
                 Smartphone Model:

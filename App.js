@@ -23,6 +23,7 @@ import ViewComponent from "./src/components/ViewComponent";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View } from "react-native-web";
 import RegisterComponent from "./src/components/RegisterComponent";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const CombinedDefaultTheme = merge(PaperDefaultTheme, NavigationDefaultTheme);
 const CombinedDarkTheme = merge(PaperDarkTheme, NavigationDarkTheme);
@@ -45,6 +46,7 @@ export default function App() {
     password: "",
     picture: "../../mock/Image/ProfilePicture.png",
   });
+  const [localData, setLocalData] = useState({});
 
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
 
@@ -68,9 +70,17 @@ export default function App() {
 
   const setUserinformationFunc = React.useCallback(
     (userObject) => {
+      storeDataLocal(userObject);
       return setsetuserInformation(userObject);
     },
     [userInformation]
+  );
+
+  const setLocalDataFunc = React.useCallback(
+    (Object) => {
+      return setLocalData(Object);
+    },
+    [localData]
   );
 
   const removeFriend = React.useCallback((tempItem) => {
@@ -96,6 +106,18 @@ export default function App() {
     [aktiveFriend]
   );
 
+  //########################
+  const storeDataLocal = async (userObject) => {
+    try {
+      const jsonValue = JSON.stringify(userObject);
+      await AsyncStorage.setItem("User", jsonValue);
+      console.log("saved");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  //########################
+
   const preferences = React.useMemo(
     () => ({
       toggleTheme,
@@ -113,6 +135,8 @@ export default function App() {
       setAktiveFriendFunc,
       userInformation,
       setUserinformationFunc,
+      localData,
+      setLocalDataFunc,
     }),
     [
       toggleTheme,
@@ -130,6 +154,8 @@ export default function App() {
       setAktiveFriendFunc,
       userInformation,
       setUserinformationFunc,
+      localData,
+      setLocalDataFunc,
     ]
   );
 

@@ -22,4 +22,6 @@ export const PreferencesContext = React.createContext({
     picture: "../../mock/Image/ProfilePicture.png",
   },
   setUserinformationFunc: () => {},
+  localData: {},
+  setLocalDataFunc: () => {},
 });
