@@ -21,7 +21,4 @@ export const PreferencesContext = React.createContext({
     password: "",
     picture: "../../mock/Image/ProfilePicture.png",
   },
-  setUserinformationFunc: () => {},
-  localData: {},
-  setLocalDataFunc: () => {},
 });

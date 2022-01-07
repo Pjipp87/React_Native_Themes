@@ -5,12 +5,16 @@ import { PreferencesContext } from "../utils/ThemeContext";
 import { Modal } from "react-native-paper";
 import { Text, Button } from "react-native-paper";
 import { FriendInfoModal } from "../components/FriendInfoModal";
+import { useLinkTo } from "@react-navigation/native";
+import { FriendSuggestionScreen } from "./FriendSuggestionScreen";
 
 export const FriendsScreen = ({ navigation }) => {
   const { friendArray, showInfoModal, toogleInfoModal, quotes } =
     React.useContext(PreferencesContext);
 
   if (showInfoModal) return <FriendInfoModal />;
+
+  const linkTo = useLinkTo();
 
   if (friendArray.length === 0) {
     return (
@@ -27,13 +31,12 @@ export const FriendsScreen = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <FlatList
-          data={friendArray}
-          renderItem={({ item }) => <FriendListItem friend={item} />}
-          keyExtractor={(item) => item.login.uuid}
-        />
-      </View>
+      <FlatList
+        data={friendArray}
+        renderItem={({ item }) => <FriendListItem friend={item} />}
+        keyExtractor={(item) => item.login.uuid}
+      />
+
       <Button onPress={() => navigation.navigate("Vorschläge")}>
         Vorschläge anzeigen
       </Button>
