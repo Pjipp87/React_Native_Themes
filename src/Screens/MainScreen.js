@@ -73,15 +73,26 @@ export const MainScreen = ({ scene, navigation, route }) => {
     try {
       const jsonValue = await AsyncStorage.getItem("User");
       console.log("geklappt:", JSON.parse(jsonValue));
-      return setCurrentUserData(JSON.parse(jsonValue));
+      const userdata = JSON.parse(jsonValue);
+      if (userdata != null) {
+        return setCurrentUserData(userdata);
+      } else {
+        return setCurrentUserData({
+          firstname: "",
+          lastname: "",
+          username: "",
+          password: "",
+          picture: "../../mock/Image/ProfilePicture.png",
+        });
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    _getApiResponse();
     _getUserData();
+    _getApiResponse();
     setTimeout(() => {
       setVisibleBanner(true);
     }, 1500);
