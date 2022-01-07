@@ -67,14 +67,15 @@ export const MainScreen = ({ scene, navigation, route }) => {
       console.log(error);
     }
   };
-
+  const isFocused = navigation.isFocused();
   useEffect(() => {
-    _getUserData();
-
-    setTimeout(() => {
-      setVisibleBanner(true);
-    }, 1500);
-  }, [!friendsSuggestion]);
+    if (!isFocused) {
+      _getUserData();
+      setTimeout(() => {
+        setVisibleBanner(true);
+      }, 1500);
+    }
+  }, []);
 
   //###################
 
