@@ -70,10 +70,11 @@ export const FriendSuggestionScreen = ({ scene, navigation, route }) => {
     );
   };
 
+  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   const isFocused = navigation.isFocused();
   useEffect(() => {
     isFocused ? _getApiResponse() : null;
-  }, [!isLoading]);
+  }, []);
   //###################
 
   const _onAdd = (item) => {
