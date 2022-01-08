@@ -24,8 +24,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View } from "react-native-web";
 import RegisterComponent from "./src/components/RegisterComponent";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import { FriendSuggestionScreen } from "./src/Screens/FriendSuggestionScreen";
+
+import { db } from "./src/Screens/FireBaseScreen";
+import { collection, addDoc } from "firebase/firestore";
 
 const CombinedDefaultTheme = merge(PaperDefaultTheme, NavigationDefaultTheme);
 const CombinedDarkTheme = merge(PaperDarkTheme, NavigationDarkTheme);
@@ -75,6 +77,20 @@ export default function App() {
   }, [gotMessage]);
 
   const addFriend = React.useCallback((item) => {
+    //********************************************************
+    const storeOnline = async () => {
+      try {
+        const docRef = await addDoc(collection(db, "Friends"), {
+          first: "Nina",
+          last: "Schmidt",
+        });
+        console.log("Document written with ID: ", docRef.id);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    storeOnline();
+    //############################################################
     return setFriendArray((friendArray) => [...friendArray, item]);
   });
 
@@ -159,8 +175,6 @@ export default function App() {
       console.log(error);
     }
   };
-
-  //########################
 
   const preferences = React.useMemo(
     () => ({

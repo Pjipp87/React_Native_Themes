@@ -44,16 +44,20 @@ export default function RegisterComponent({ navigation }) {
   const window = useWindowDimensions();
 
   const _setUser = () => {
-    const userObject = {
-      firstName,
-      lastName,
-      userName,
-      password,
-    };
-    setUserinformationFunc(userObject);
-    setProfilePictureFunc(image);
-    console.log("#####################", pofilePicture);
-    navigation.navigate("Profil");
+    if (firstName && lastName && userName && password) {
+      const userObject = {
+        firstName,
+        lastName,
+        userName,
+        password,
+      };
+      setUserinformationFunc(userObject);
+      setProfilePictureFunc(image);
+      console.log("#####################", pofilePicture);
+      navigation.navigate("Profil");
+    } else {
+      alert("Bitte Daten eintragen!");
+    }
   };
 
   return (
