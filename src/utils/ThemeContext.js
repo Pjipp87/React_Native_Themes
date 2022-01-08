@@ -25,4 +25,6 @@ export const PreferencesContext = React.createContext({
   setStatusFunc: () => {},
   pofilePicture: null,
   setProfilePictureFunc: () => {},
+  aktiveNewsLink: "",
+  setAktiveNewsLinkFunc: () => {},
 });

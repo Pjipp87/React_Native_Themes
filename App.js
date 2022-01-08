@@ -51,8 +51,16 @@ export default function App() {
   const [localData, setLocalData] = useState({});
   const [status, setStatus] = useState("");
   const [pofilePicture, setProfilePicture] = useState(null);
+  const [aktiveNewsLink, setAktiveNewsLink] = useState("");
 
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
+
+  const setAktiveNewsLinkFunc = React.useCallback(
+    (link) => {
+      return setAktiveNewsLink(link);
+    },
+    [aktiveNewsLink]
+  );
 
   const toggleTheme = React.useCallback(() => {
     return setIsThemeDark(!isThemeDark);
@@ -177,6 +185,8 @@ export default function App() {
       setStatusFunc,
       pofilePicture,
       setProfilePictureFunc,
+      aktiveNewsLink,
+      setAktiveNewsLinkFunc,
     }),
     [
       toggleTheme,
@@ -200,6 +210,8 @@ export default function App() {
       setStatusFunc,
       pofilePicture,
       setProfilePictureFunc,
+      aktiveNewsLink,
+      setAktiveNewsLinkFunc,
     ]
   );
 
