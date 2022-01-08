@@ -68,8 +68,6 @@ export default function App() {
 
   const addFriend = React.useCallback((item) => {
     return setFriendArray((friendArray) => [...friendArray, item]);
-
-    //console.log("Vorher: ", friendArray);
   });
 
   const setUserinformationFunc = React.useCallback(
@@ -131,7 +129,6 @@ export default function App() {
     try {
       const jsonValue = JSON.stringify(userObject);
       await AsyncStorage.setItem("User", jsonValue);
-      console.log("saved");
     } catch (error) {
       console.log(error);
     }
@@ -141,7 +138,6 @@ export default function App() {
     try {
       const jsonValue = JSON.stringify(userObject);
       await AsyncStorage.setItem("Status", jsonValue);
-      console.log("saved");
     } catch (error) {
       console.log(error);
     }
@@ -151,7 +147,6 @@ export default function App() {
     try {
       const jsonValue = JSON.stringify(userObject);
       await AsyncStorage.setItem("Picture", jsonValue);
-      console.log("saved");
     } catch (error) {
       console.log(error);
     }

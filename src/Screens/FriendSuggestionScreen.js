@@ -166,7 +166,7 @@ export const FriendSuggestionScreen = ({ scene, navigation, route }) => {
           <Modal
             visible={showProfilPicture}
             contentContainerStyle={{
-              backgroundColor: "white",
+              backgroundColor: "rgba(255, 0, 255, 0.0)",
               padding: 0,
               justifyContent: "center",
               alignItems: "center",

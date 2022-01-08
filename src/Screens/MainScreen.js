@@ -92,9 +92,9 @@ export const MainScreen = ({ scene, navigation, route }) => {
   };
   const isFocused = navigation.isFocused();
   useEffect(() => {
-    isFocused ? _getUserData() : null;
-    isFocused ? _getStatusUpdate() : null;
-    isFocused ? _getUserImageFromLocal() : null;
+    _getUserData();
+    _getStatusUpdate();
+    _getUserImageFromLocal();
     setTimeout(() => {
       setVisibleBanner(true);
     }, 1500);
@@ -155,7 +155,7 @@ export const MainScreen = ({ scene, navigation, route }) => {
             <Modal
               visible={statusModal}
               contentContainerStyle={{
-                backgroundColor: "white",
+                backgroundColor: colors.background,
                 padding: 20,
               }}
               style={{

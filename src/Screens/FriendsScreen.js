@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { FriendListItem } from "../components/FriendListItem";
 import { PreferencesContext } from "../utils/ThemeContext";
@@ -9,11 +9,10 @@ import { useLinkTo } from "@react-navigation/native";
 import { FriendSuggestionScreen } from "./FriendSuggestionScreen";
 
 export const FriendsScreen = ({ navigation }) => {
-  const { friendArray, showInfoModal, toogleInfoModal, quotes } =
-    React.useContext(PreferencesContext);
+  const { friendArray } = React.useContext(PreferencesContext);
 
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  if (showInfoModal) return <FriendInfoModal />;
+
   const [toggleSuggests, setToggleSuggests] = useState(false);
 
   const _switchScreens = () => {
