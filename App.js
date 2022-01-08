@@ -49,6 +49,7 @@ export default function App() {
     picture: "../../mock/Image/ProfilePicture.png",
   });
   const [localData, setLocalData] = useState({});
+  const [status, setStatus] = useState("");
 
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
 
@@ -76,6 +77,14 @@ export default function App() {
       return setsetuserInformation(userObject);
     },
     [userInformation]
+  );
+
+  const setStatusFunc = React.useCallback(
+    (statusObject) => {
+      storeStatusLocal(statusObject);
+      return setStatus(statusObject);
+    },
+    [status]
   );
 
   const setLocalDataFunc = React.useCallback(
@@ -118,6 +127,16 @@ export default function App() {
       console.log(error);
     }
   };
+
+  const storeStatusLocal = async (userObject) => {
+    try {
+      const jsonValue = JSON.stringify(userObject);
+      await AsyncStorage.setItem("Status", jsonValue);
+      console.log("saved");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   //########################
 
   const preferences = React.useMemo(
@@ -139,6 +158,8 @@ export default function App() {
       setUserinformationFunc,
       localData,
       setLocalDataFunc,
+      status,
+      setStatusFunc,
     }),
     [
       toggleTheme,
@@ -158,6 +179,8 @@ export default function App() {
       setUserinformationFunc,
       localData,
       setLocalDataFunc,
+      status,
+      setStatusFunc,
     ]
   );
 

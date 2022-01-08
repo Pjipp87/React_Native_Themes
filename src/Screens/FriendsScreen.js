@@ -7,7 +7,6 @@ import { Text, Button } from "react-native-paper";
 import { FriendInfoModal } from "../components/FriendInfoModal";
 import { useLinkTo } from "@react-navigation/native";
 import { FriendSuggestionScreen } from "./FriendSuggestionScreen";
-import { NewsScreen } from "./NewsScreen";
 
 export const FriendsScreen = ({ navigation }) => {
   const { friendArray, showInfoModal, toogleInfoModal, quotes } =
@@ -24,7 +23,7 @@ export const FriendsScreen = ({ navigation }) => {
   if (toggleSuggests) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <NewsScreen></NewsScreen>
+        <FriendSuggestionScreen></FriendSuggestionScreen>
         <Button onPress={() => _switchScreens()}>Zurück</Button>
       </View>
     );

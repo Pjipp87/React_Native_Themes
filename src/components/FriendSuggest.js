@@ -6,7 +6,7 @@ import { Dimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "react-native-paper";
 
-export const FriendSuggest = ({ friend, onAdd }) => {
+export const FriendSuggest = ({ friend, onAdd, showModal }) => {
   const { name, picture } = friend;
 
   const { theme } = useTheme();
@@ -26,12 +26,14 @@ export const FriendSuggest = ({ friend, onAdd }) => {
         elevation: 5,
       }}
     >
-      <Avatar.Image
-        size={60}
-        source={{
-          uri: picture.large,
-        }}
-      />
+      <Pressable onPress={showModal}>
+        <Avatar.Image
+          size={60}
+          source={{
+            uri: picture.large,
+          }}
+        />
+      </Pressable>
       <View
         style={{
           flex: 1,

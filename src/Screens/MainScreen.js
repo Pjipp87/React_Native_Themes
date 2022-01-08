@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  View,
-  FlatList,
-  Vibration,
-  ScrollView,
-  useWindowDimensions,
-} from "react-native";
+import { StyleSheet, View, Pressable, useWindowDimensions } from "react-native";
 import styled from "styled-components";
-import { useTheme, Snackbar, ActivityIndicator } from "react-native-paper";
-import { Button, Headline, Avatar } from "react-native-paper";
+import {
+  useTheme,
+  Snackbar,
+  ActivityIndicator,
+  Modal,
+  Portal,
+} from "react-native-paper";
+import { Button, Headline, Avatar, TextInput } from "react-native-paper";
 import { Text, Banner } from "react-native-paper";
 import { PreferencesContext } from "../utils/ThemeContext";
 import { LoginModal } from "../components/LoginModal";
@@ -20,30 +19,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const MainScreen = ({ scene, navigation, route }) => {
   const { colors } = useTheme();
-  const { isLogedIn, toggleLogin } = React.useContext(PreferencesContext);
-  const [visibleSnackbar, setVisibleSnackbar] = React.useState(false);
+
+  const { isLogedIn, toggleLogin, setStatusFunc } =
+    React.useContext(PreferencesContext);
   const [visibleBanner, setVisibleBanner] = React.useState(false);
-  const [isLoading, setisLoading] = useState(true);
-  const [friendsSuggestion, setfriendsSuggestion] = useState([]);
-  const {
-    removeFriend,
-    addFriend,
-    friendArray,
-    setAktiveFriendFunc,
-    userInformation,
-  } = React.useContext(PreferencesContext);
   const [currentUserData, setCurrentUserData] = useState({});
-
-  const [tempItem, setTempItem] = useState(null);
-
-  const onToggleSnackBar = (item) => {
-    setVisibleSnackbar(!visibleSnackbar);
-    setTempItem(item);
-  };
+  const [statusModal, setStatusModal] = useState(false);
+  const [statusMessage, setstatusMessage] = useState("");
+  const [newStatusMessage, setnewStatusMessage] = useState("");
 
   const window = useWindowDimensions();
-
-  const onDismissSnackBar = () => setVisibleSnackbar(false);
 
   if (!isLogedIn) return <LoginModal />;
 
@@ -61,7 +46,23 @@ export const MainScreen = ({ scene, navigation, route }) => {
           username: "",
           password: "",
           picture: "../../mock/Image/ProfilePicture.png",
+          status: "",
         });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const _getStatusUpdate = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("Status");
+      console.log("geklappt:", JSON.parse(jsonValue));
+      const newStatus = JSON.parse(jsonValue);
+      if (newStatus != null) {
+        return setstatusMessage(newStatus);
+      } else {
+        return setstatusMessage("");
       }
     } catch (error) {
       console.log(error);
@@ -70,71 +71,22 @@ export const MainScreen = ({ scene, navigation, route }) => {
   const isFocused = navigation.isFocused();
   useEffect(() => {
     isFocused ? _getUserData() : null;
+    isFocused ? _getStatusUpdate() : null;
     setTimeout(() => {
       setVisibleBanner(true);
     }, 1500);
-  }, [!currentUserData]);
+  }, [!currentUserData, !statusMessage]);
 
   //###################
 
-  const _onAdd = (item) => {
-    Vibration.vibrate(100);
-    if (
-      friendArray.findIndex((index) => index.login.uuid === item.login.uuid) ===
-      -1
-    ) {
-      onToggleSnackBar(item);
-      addFriend(item);
-      setAktiveFriendFunc(item);
-      if (friendsSuggestion.length !== 0) {
-        let tempArray = friendsSuggestion;
-        tempArray.splice(tempArray.indexOf(item), 1);
-        setfriendsSuggestion(tempArray);
-      }
-    } else {
-      alert("Kontakt bereits hinzugefügt!");
-    }
+  const _showStatusModal = () => {
+    setStatusModal(!statusModal);
   };
 
-  const _refresh = () => {
-    setisLoading(true);
-    _getApiResponse();
-  };
-
-  const LoadingScreen = () => {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator animating={true} size={80} />
-      </View>
-    );
-  };
-
-  const SuggestionList = () => {
-    return (
-      <>
-        <FlatList
-          data={friendsSuggestion}
-          renderItem={({ item }) => (
-            <FriendSuggest friend={item} onAdd={() => _onAdd(item)} />
-          )}
-          keyExtractor={(item) => item.login.uuid}
-          refreshing={isLoading}
-          onRefresh={() => _refresh()}
-        />
-
-        <Snackbar
-          duration={3000}
-          visible={visibleSnackbar}
-          onDismiss={onDismissSnackBar}
-          action={{
-            label: "Rückgängig",
-            onPress: () => removeFriend(tempItem),
-          }}
-        >
-          Kontakt hinzugefügt
-        </Snackbar>
-      </>
-    );
+  const _setStatus = () => {
+    setStatusFunc(newStatusMessage);
+    setStatusModal(!statusModal);
+    setnewStatusMessage("");
   };
 
   return (
@@ -153,6 +105,38 @@ export const MainScreen = ({ scene, navigation, route }) => {
       </Banner>
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <View>
+          <Portal>
+            <Modal
+              visible={statusModal}
+              contentContainerStyle={{
+                backgroundColor: "white",
+                paddingHorizontal: 20,
+              }}
+              style={{
+                padding: 0,
+              }}
+              onDismiss={() => _showStatusModal()}
+            >
+              <Text>Neuer Status</Text>
+              <TextInput
+                label="Neuer Status"
+                value={newStatusMessage}
+                onChangeText={(status) => setnewStatusMessage(status)}
+              />
+              <View
+                style={{
+                  flexDirection: "row-reverse",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Button onPress={() => _setStatus(statusMessage)}>
+                  Speichern
+                </Button>
+                <Button onPress={() => _showStatusModal()}>Abbrechen</Button>
+              </View>
+            </Modal>
+          </Portal>
           <Headline
             style={{
               textAlign: "center",
@@ -194,12 +178,22 @@ export const MainScreen = ({ scene, navigation, route }) => {
               <Text>{Device.modelName}</Text>
             </View>
           </View>
-          <Button
-            onPress={() => navigation.navigate("Registrierung")}
-            style={{ paddingBottom: 20 }}
+          <View style={{ paddingVertical: 50 }}>
+            <Text>Status:</Text>
+            <Text>{statusMessage}</Text>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            Profil ändern
-          </Button>
+            <Button onPress={() => navigation.navigate("Registrierung")}>
+              Profil ändern
+            </Button>
+            <Button onPress={() => _showStatusModal()}>Status ändern</Button>
+          </View>
         </View>
       </View>
     </>

@@ -21,4 +21,6 @@ export const PreferencesContext = React.createContext({
     password: "",
     picture: "../../mock/Image/ProfilePicture.png",
   },
+  status: "",
+  setStatusFunc: () => {},
 });

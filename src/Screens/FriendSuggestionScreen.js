@@ -6,9 +6,17 @@ import {
   Vibration,
   ScrollView,
   useWindowDimensions,
+  Image,
+  Pressable,
 } from "react-native";
 import styled from "styled-components";
-import { useTheme, Snackbar, ActivityIndicator } from "react-native-paper";
+import {
+  useTheme,
+  Snackbar,
+  ActivityIndicator,
+  Modal,
+  Portal,
+} from "react-native-paper";
 import { Button, Headline, Avatar } from "react-native-paper";
 import { Text, Banner } from "react-native-paper";
 import { PreferencesContext } from "../utils/ThemeContext";
@@ -17,7 +25,6 @@ import { FriendSuggest } from "../components/FriendSuggest";
 import axios, { Axios } from "axios";
 import * as Device from "expo-device";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
 
 export const FriendSuggestionScreen = ({ scene, navigation, route }) => {
   const { colors } = useTheme();
@@ -33,7 +40,8 @@ export const FriendSuggestionScreen = ({ scene, navigation, route }) => {
     setAktiveFriendFunc,
     userInformation,
   } = React.useContext(PreferencesContext);
-  const [currentUserData, setCurrentUserData] = useState({});
+  const [showProfilPicture, setShowProfilPicture] = useState(false);
+  const [profilePicture, setprofilePicture] = useState("");
 
   const [tempItem, setTempItem] = useState(null);
 
@@ -70,11 +78,10 @@ export const FriendSuggestionScreen = ({ scene, navigation, route }) => {
     );
   };
 
-  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  const isFocused = navigation.isFocused();
   useEffect(() => {
-    isFocused ? _getApiResponse() : null;
-  }, []);
+    _getApiResponse();
+  }, [!friendsSuggestion]);
+
   //###################
 
   const _onAdd = (item) => {
@@ -101,6 +108,14 @@ export const FriendSuggestionScreen = ({ scene, navigation, route }) => {
     _getApiResponse();
   };
 
+  const _showModal = (item) => {
+    setShowProfilPicture(!showProfilPicture);
+    if (item) {
+      Vibration.vibrate(100);
+      setprofilePicture(item);
+    }
+  };
+
   const LoadingScreen = () => {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -115,7 +130,11 @@ export const FriendSuggestionScreen = ({ scene, navigation, route }) => {
         <FlatList
           data={friendsSuggestion}
           renderItem={({ item }) => (
-            <FriendSuggest friend={item} onAdd={() => _onAdd(item)} />
+            <FriendSuggest
+              friend={item}
+              onAdd={() => _onAdd(item)}
+              showModal={() => _showModal(item.picture.large)}
+            />
           )}
           keyExtractor={(item) => item.login.uuid}
           refreshing={isLoading}
@@ -143,6 +162,28 @@ export const FriendSuggestionScreen = ({ scene, navigation, route }) => {
         <Headline style={{ paddingVertical: 20, fontWeight: "bold" }}>
           Kontaktvorschläge
         </Headline>
+        <Portal>
+          <Modal
+            visible={showProfilPicture}
+            contentContainerStyle={{
+              backgroundColor: "white",
+              padding: 0,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            style={{
+              padding: 0,
+            }}
+            onDismiss={() => _showModal()}
+          >
+            <Pressable onPress={() => _showModal()}>
+              <Image
+                source={{ uri: profilePicture }}
+                style={{ width: 300, height: 300 }}
+              ></Image>
+            </Pressable>
+          </Modal>
+        </Portal>
         {isLoading ? <LoadingScreen /> : <SuggestionList />}
       </View>
     </>
