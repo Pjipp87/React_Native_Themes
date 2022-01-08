@@ -16,8 +16,12 @@ export default function RegisterComponent({ navigation }) {
   const [lastName, setlastName] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const { setUserinformationFunc, userInformation } =
-    React.useContext(PreferencesContext);
+  const {
+    setUserinformationFunc,
+    userInformation,
+    setProfilePictureFunc,
+    pofilePicture,
+  } = React.useContext(PreferencesContext);
 
   //------
 
@@ -44,10 +48,11 @@ export default function RegisterComponent({ navigation }) {
       firstName,
       lastName,
       userName,
-      image,
       password,
     };
     setUserinformationFunc(userObject);
+    setProfilePictureFunc(image);
+    console.log("#####################", pofilePicture);
     navigation.navigate("Profil");
   };
 

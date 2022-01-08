@@ -21,14 +21,19 @@ import * as ImagePicker from "expo-image-picker";
 export const MainScreen = ({ scene, navigation, route }) => {
   const { colors } = useTheme();
 
-  const { isLogedIn, toggleLogin, setStatusFunc, setUserinformationFunc } =
-    React.useContext(PreferencesContext);
+  const {
+    isLogedIn,
+    setProfilePictureFunc,
+    setStatusFunc,
+    setUserinformationFunc,
+  } = React.useContext(PreferencesContext);
   const [visibleBanner, setVisibleBanner] = React.useState(false);
   const [currentUserData, setCurrentUserData] = useState({});
   const [statusModal, setStatusModal] = useState(false);
   const [statusMessage, setstatusMessage] = useState("");
   const [newStatusMessage, setnewStatusMessage] = useState("");
   const [newImage, setNewImage] = useState(null);
+  const [profilePicture, setProfilePicture] = useState(null);
 
   const window = useWindowDimensions();
 
@@ -56,6 +61,21 @@ export const MainScreen = ({ scene, navigation, route }) => {
     }
   };
 
+  const _getUserImageFromLocal = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("Picture");
+      console.log("geklappt:", JSON.parse(jsonValue));
+      const picture = JSON.parse(jsonValue);
+      if (picture != null) {
+        return setProfilePicture(picture);
+      } else {
+        return setCurrentUserData("../../mock/Image/ProfilePicture.png");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const _getStatusUpdate = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("Status");
@@ -74,10 +94,11 @@ export const MainScreen = ({ scene, navigation, route }) => {
   useEffect(() => {
     isFocused ? _getUserData() : null;
     isFocused ? _getStatusUpdate() : null;
+    isFocused ? _getUserImageFromLocal() : null;
     setTimeout(() => {
       setVisibleBanner(true);
     }, 1500);
-  }, [!currentUserData, !statusMessage]);
+  }, [!currentUserData, !statusMessage, !profilePicture]);
 
   //###################
 
@@ -89,6 +110,22 @@ export const MainScreen = ({ scene, navigation, route }) => {
     setStatusFunc(newStatusMessage);
     setStatusModal(!statusModal);
     setnewStatusMessage("");
+  };
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setProfilePictureFunc(result.uri);
+    }
   };
 
   return (
@@ -105,7 +142,14 @@ export const MainScreen = ({ scene, navigation, route }) => {
       >
         Die App befindet sich aktuell in Entwicklung
       </Banner>
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "flex-start",
+          paddingTop: 25,
+          alignItems: "center",
+        }}
+      >
         <View>
           <Portal>
             <Modal
@@ -176,16 +220,17 @@ export const MainScreen = ({ scene, navigation, route }) => {
               paddingBottom: 20,
             }}
           >
-            <View style={{ paddingLeft: 10, paddingRight: 20 }}>
+            <View
+              style={{ paddingLeft: 10, paddingRight: 20, paddingVertical: 20 }}
+            >
               <Avatar.Image
                 size={120}
                 style={{ marginHorizontal: 30 }}
                 source={{
-                  uri: currentUserData.image,
+                  uri: profilePicture,
                 }}
               />
               <Button
-                mode="contained"
                 compact={true}
                 onPress={pickImage}
                 style={{ marginTop: 20 }}
@@ -208,15 +253,18 @@ export const MainScreen = ({ scene, navigation, route }) => {
               <Text>{Device.modelName}</Text>
             </View>
           </View>
-          <View style={{ paddingVertical: 50 }}>
-            <Text>Status:</Text>
-            <Text>{statusMessage}</Text>
+          <View style={{ paddingVertical: 30, paddingHorizontal: 20 }}>
+            <Text style={{ fontSize: 18, fontWeight: "bold" }}>Status:</Text>
+            <Text style={{ fontSize: 18 }}>{statusMessage}</Text>
           </View>
           <View
             style={{
+              flex: 1,
               flexDirection: "row",
               justifyContent: "center",
-              alignItems: "center",
+              alignItems: "flex-end",
+              alignSelf: "center",
+              paddingBottom: 20,
             }}
           >
             <Button

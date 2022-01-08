@@ -50,6 +50,7 @@ export default function App() {
   });
   const [localData, setLocalData] = useState({});
   const [status, setStatus] = useState("");
+  const [pofilePicture, setProfilePicture] = useState(null);
 
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
 
@@ -92,6 +93,14 @@ export default function App() {
       return setLocalData(Object);
     },
     [localData]
+  );
+
+  const setProfilePictureFunc = React.useCallback(
+    (picture) => {
+      storePictureLocal(picture);
+      return setProfilePicture(picture);
+    },
+    [pofilePicture]
   );
 
   const removeFriend = React.useCallback((tempItem) => {
@@ -137,6 +146,17 @@ export default function App() {
       console.log(error);
     }
   };
+
+  const storePictureLocal = async (userObject) => {
+    try {
+      const jsonValue = JSON.stringify(userObject);
+      await AsyncStorage.setItem("Picture", jsonValue);
+      console.log("saved");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   //########################
 
   const preferences = React.useMemo(
@@ -160,6 +180,8 @@ export default function App() {
       setLocalDataFunc,
       status,
       setStatusFunc,
+      pofilePicture,
+      setProfilePictureFunc,
     }),
     [
       toggleTheme,
@@ -181,6 +203,8 @@ export default function App() {
       setLocalDataFunc,
       status,
       setStatusFunc,
+      pofilePicture,
+      setProfilePictureFunc,
     ]
   );
 
