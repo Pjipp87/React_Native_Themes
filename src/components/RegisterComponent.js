@@ -16,7 +16,8 @@ export default function RegisterComponent({ navigation }) {
   const [lastName, setlastName] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const { setUserinformationFunc } = React.useContext(PreferencesContext);
+  const { setUserinformationFunc, userInformation } =
+    React.useContext(PreferencesContext);
 
   //------
 
@@ -60,7 +61,7 @@ export default function RegisterComponent({ navigation }) {
           paddingVertical: 40,
         }}
       >
-        Neuer Benutzer
+        Profil ändern
       </Text>
       <View style={{ paddingBottom: 20 }}>
         <TextInput
@@ -89,6 +90,12 @@ export default function RegisterComponent({ navigation }) {
       <View
         style={{ flex: 0 - 5, alignItems: "center", justifyContent: "center" }}
       >
+        <Avatar.Image
+          size={120}
+          style={{ marginHorizontal: 30, marginBottom: 40 }}
+          source={{ uri: image }}
+        />
+
         <Button
           mode="contained"
           compact={true}
@@ -97,28 +104,13 @@ export default function RegisterComponent({ navigation }) {
         >
           Pofilbild hochladen
         </Button>
-        {image && (
-          <Avatar.Image
-            size={120}
-            style={{ marginHorizontal: 30, marginBottom: 40 }}
-            source={{ uri: image }}
-          />
-        )}
       </View>
-      <View>
-        <Text>Check:</Text>
-        <Text>
-          Name: {firstName} {lastName}
-        </Text>
 
-        <Text>Benutzername: {userName}</Text>
-      </View>
       <View
         style={{
           flex: 1,
           flexDirection: "row",
-          position: "relative",
-          alignItems: "center",
+          alignItems: "flex-end",
           width: window.width,
           justifyContent: "space-around",
         }}
@@ -126,7 +118,7 @@ export default function RegisterComponent({ navigation }) {
         <Button
           mode="contained"
           compact={true}
-          onPress={() => alert("Abbruch")}
+          onPress={() => navigation.navigate("Profil")}
         >
           Abbrechen
         </Button>

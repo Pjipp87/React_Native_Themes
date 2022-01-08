@@ -16,17 +16,19 @@ import { FriendSuggest } from "../components/FriendSuggest";
 import axios, { Axios } from "axios";
 import * as Device from "expo-device";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as ImagePicker from "expo-image-picker";
 
 export const MainScreen = ({ scene, navigation, route }) => {
   const { colors } = useTheme();
 
-  const { isLogedIn, toggleLogin, setStatusFunc } =
+  const { isLogedIn, toggleLogin, setStatusFunc, setUserinformationFunc } =
     React.useContext(PreferencesContext);
   const [visibleBanner, setVisibleBanner] = React.useState(false);
   const [currentUserData, setCurrentUserData] = useState({});
   const [statusModal, setStatusModal] = useState(false);
   const [statusMessage, setstatusMessage] = useState("");
   const [newStatusMessage, setnewStatusMessage] = useState("");
+  const [newImage, setNewImage] = useState(null);
 
   const window = useWindowDimensions();
 
@@ -110,30 +112,48 @@ export const MainScreen = ({ scene, navigation, route }) => {
               visible={statusModal}
               contentContainerStyle={{
                 backgroundColor: "white",
-                paddingHorizontal: 20,
+                padding: 20,
               }}
               style={{
                 padding: 0,
               }}
               onDismiss={() => _showStatusModal()}
             >
-              <Text>Neuer Status</Text>
+              <Text
+                style={{
+                  paddingBottom: 20,
+                  fontSize: 30,
+                  fontWeight: "bold",
+                  textAlign: "center",
+                }}
+              >
+                Neuer Status
+              </Text>
               <TextInput
+                mode="outlined"
                 label="Neuer Status"
                 value={newStatusMessage}
+                multiline={true}
                 onChangeText={(status) => setnewStatusMessage(status)}
+                style={{ height: 190 }}
               />
               <View
                 style={{
                   flexDirection: "row-reverse",
-                  justifyContent: "center",
+                  justifyContent: "space-around",
                   alignItems: "center",
+                  paddingTop: 20,
                 }}
               >
-                <Button onPress={() => _setStatus(statusMessage)}>
+                <Button
+                  mode="contained"
+                  onPress={() => _setStatus(statusMessage)}
+                >
                   Speichern
                 </Button>
-                <Button onPress={() => _showStatusModal()}>Abbrechen</Button>
+                <Button mode="contained" onPress={() => _showStatusModal()}>
+                  Abbrechen
+                </Button>
               </View>
             </Modal>
           </Portal>
@@ -156,13 +176,23 @@ export const MainScreen = ({ scene, navigation, route }) => {
               paddingBottom: 20,
             }}
           >
-            <Avatar.Image
-              size={120}
-              style={{ marginHorizontal: 30 }}
-              source={{
-                uri: currentUserData.image,
-              }}
-            />
+            <View style={{ paddingLeft: 10, paddingRight: 20 }}>
+              <Avatar.Image
+                size={120}
+                style={{ marginHorizontal: 30 }}
+                source={{
+                  uri: currentUserData.image,
+                }}
+              />
+              <Button
+                mode="contained"
+                compact={true}
+                onPress={pickImage}
+                style={{ marginTop: 20 }}
+              >
+                Pofilbild ändern
+              </Button>
+            </View>
             <View style={{ justifyContent: "space-evenly" }}>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
                 Benutzername
@@ -189,7 +219,13 @@ export const MainScreen = ({ scene, navigation, route }) => {
               alignItems: "center",
             }}
           >
-            <Button onPress={() => navigation.navigate("Registrierung")}>
+            <Button
+              onPress={() =>
+                navigation.navigate("Registrierung", {
+                  currentData: currentUserData,
+                })
+              }
+            >
               Profil ändern
             </Button>
             <Button onPress={() => _showStatusModal()}>Status ändern</Button>
