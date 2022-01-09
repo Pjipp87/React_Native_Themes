@@ -11,14 +11,17 @@ import { useState } from "react";
 import { Portal } from "react-native-paper";
 import { useIsFocused } from "@react-navigation/native";
 import { useEffect } from "react";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "../Screens/FireBaseScreen";
 
-export const FriendInfoModal = ({ scene }) => {
+export const FriendInfoModal = ({ scene, getFromFirestore }) => {
   const {
     showInfoModal,
     toggleInfoModal,
     aktiveFriend,
     setAktiveFriendFunc,
     removeFriend,
+    currentUserName,
   } = React.useContext(PreferencesContext);
   const { colors } = useTheme();
   const [focus, setFocus] = useState(false);
@@ -55,10 +58,18 @@ export const FriendInfoModal = ({ scene }) => {
 
   const _removeFriend = () => {
     Vibration.vibrate(100);
-    removeFriend(aktiveFriend);
+    console.log(aktiveFriend.id);
+    // removeFriend(aktiveFriend);
     //setAktiveFriendFunc(null);
-
+    _deleteOnline(aktiveFriend.id);
+    getFromFirestore();
     toggleInfoModal();
+  };
+
+  const _deleteOnline = async () => {
+    await deleteDoc(
+      doc(db, `${currentUserName}_Friends`, `${aktiveFriend.id}`)
+    );
   };
 
   const [state, setState] = React.useState({ open: false });

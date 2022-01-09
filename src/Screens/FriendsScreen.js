@@ -12,7 +12,13 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "./FireBaseScreen";
 
 export const FriendsScreen = ({ navigation }) => {
-  const { friendArray, showInfoModal } = React.useContext(PreferencesContext);
+  const {
+    friendArray,
+    showInfoModal,
+    isSuggestionAtive,
+    toggleSuggestion,
+    currentUserName,
+  } = React.useContext(PreferencesContext);
 
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -21,14 +27,16 @@ export const FriendsScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const _switchScreens = () => {
-    setToggleSuggests(!toggleSuggests);
-    _getDataFromFirestore();
+    toggleSuggestion();
   };
+
   //#################### FireBase ########################
 
   const _getDataFromFirestore = async () => {
     let tempOnlineArray = [];
-    const querySnapshot = await getDocs(collection(db, "Friends"));
+    const querySnapshot = await getDocs(
+      collection(db, `${currentUserName}_Friends`)
+    );
     querySnapshot.forEach((doc) => {
       tempOnlineArray.push(doc.data());
     });
@@ -39,11 +47,12 @@ export const FriendsScreen = ({ navigation }) => {
   useEffect(() => _getDataFromFirestore(), []);
 
   //######################################################
-  if (toggleSuggests) {
+  if (isSuggestionAtive) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <FriendSuggestionScreen></FriendSuggestionScreen>
-        <Button onPress={() => _switchScreens()}>Zurück</Button>
+        <FriendSuggestionScreen
+          getFromFirestore={() => _getDataFromFirestore()}
+        />
       </View>
     );
   }
@@ -65,7 +74,7 @@ export const FriendsScreen = ({ navigation }) => {
   if (isLoading) {
     return <Loading />;
   } else if (showInfoModal) {
-    return <FriendInfoModal />;
+    return <FriendInfoModal getFromFirestore={() => _getDataFromFirestore()} />;
   } else {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -80,8 +89,7 @@ export const FriendsScreen = ({ navigation }) => {
           keyExtractor={(item) => item.id}
         />
 
-        <Button onPress={() => _switchScreens()}>Vorschläge anzeigen</Button>
-        <Button onPress={() => _getDataFromFirestore()}>FireStore</Button>
+        <Button onPress={() => toggleSuggestion()}>Vorschläge anzeigen</Button>
       </View>
     );
   }

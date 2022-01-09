@@ -33,7 +33,7 @@ export const FriendSuggestionScreen = ({
   scene,
   navigation,
   route,
-  firebase,
+  getFromFirestore,
 }) => {
   const { colors } = useTheme();
   const { isLogedIn, toggleLogin } = React.useContext(PreferencesContext);
@@ -46,7 +46,8 @@ export const FriendSuggestionScreen = ({
     addFriend,
     friendArray,
     setAktiveFriendFunc,
-    userInformation,
+    toggleSuggestion,
+    currentUserName,
   } = React.useContext(PreferencesContext);
   const [showProfilPicture, setShowProfilPicture] = useState(false);
   const [profilePicture, setprofilePicture] = useState("");
@@ -106,6 +107,7 @@ export const FriendSuggestionScreen = ({
         tempArray.splice(tempArray.indexOf(item), 1);
         setfriendsSuggestion(tempArray);
       }
+      getFromFirestore();
     } else {
       alert("Kontakt bereits hinzugefügt!");
     }
@@ -114,15 +116,17 @@ export const FriendSuggestionScreen = ({
   const _storeOnline = async (item) => {
     try {
       //##########################################################################################
-      await setDoc(doc(db, "Friends", `${item.name.first} ${item.name.last}`), {
-        first: item.name.first,
-        last: item.name.last,
-        status: item.text,
-        email: item.email,
-        picture: item.picture.large,
-        id: item.login.uuid,
-      });
-      console.log("Document written with ID: ", docRef.id);
+      await setDoc(
+        doc(db, `${currentUserName}_Friends`, `${item.login.uuid}`),
+        {
+          first: item.name.first,
+          last: item.name.last,
+          status: item.text,
+          email: item.email,
+          picture: item.picture.large,
+          id: item.login.uuid,
+        }
+      );
     } catch (error) {
       console.log(error);
     }
@@ -165,6 +169,7 @@ export const FriendSuggestionScreen = ({
           refreshing={isLoading}
           onRefresh={() => _refresh()}
         />
+        <Button onPress={() => toggleSuggestion()}>Zurück</Button>
 
         <Snackbar
           duration={3000}

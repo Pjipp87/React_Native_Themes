@@ -53,7 +53,7 @@ export default function NewsList({ newsArray, tootlgeWebView }) {
             title={newsArray.description}
             description={
               <Pressable onPress={() => _gotToWebsite(newsArray.url)}>
-                <Title>Link zur Website</Title>
+                <Title style={{ color: "blue" }}>Link zur Website</Title>
               </Pressable>
             }
             titleNumberOfLines={100}

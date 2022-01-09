@@ -26,6 +26,8 @@ export const MainScreen = ({ scene, navigation, route }) => {
     setProfilePictureFunc,
     setStatusFunc,
     setUserinformationFunc,
+    currentUserName,
+    setCurrentUsernameFunc,
   } = React.useContext(PreferencesContext);
   const [visibleBanner, setVisibleBanner] = React.useState();
   const [currentUserData, setCurrentUserData] = useState({});
@@ -45,6 +47,7 @@ export const MainScreen = ({ scene, navigation, route }) => {
 
       const userdata = JSON.parse(jsonValue);
       if (userdata != null) {
+        setCurrentUsernameFunc(userdata.userName);
         return setCurrentUserData(userdata);
       } else {
         return setCurrentUserData({

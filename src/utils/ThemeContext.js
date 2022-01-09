@@ -27,4 +27,8 @@ export const PreferencesContext = React.createContext({
   setProfilePictureFunc: () => {},
   aktiveNewsLink: "",
   setAktiveNewsLinkFunc: () => {},
+  isSuggestionAtive: false,
+  toggleSuggestion: () => {},
+  currentUserName: "",
+  setCurrentUsernameFunc: () => {},
 });

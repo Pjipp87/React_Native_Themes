@@ -54,6 +54,8 @@ export default function App() {
   const [status, setStatus] = useState("");
   const [pofilePicture, setProfilePicture] = useState(null);
   const [aktiveNewsLink, setAktiveNewsLink] = useState("");
+  const [isSuggestionAtive, setIsSuggestionAtkive] = useState(false);
+  const [currentUserName, setCurrentUsername] = useState("");
 
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
 
@@ -71,6 +73,10 @@ export default function App() {
   const toggleLogin = React.useCallback(() => {
     return setIsLogedIn(!isLogedIn);
   }, [isLogedIn]);
+
+  const setCurrentUsernameFunc = React.useCallback((name) => {
+    return setCurrentUsername(name);
+  });
 
   const toggleMessage = React.useCallback(() => {
     return setGotMessage(!gotMessage);
@@ -105,6 +111,11 @@ export default function App() {
     },
     [localData]
   );
+
+  const toggleSuggestion = React.useCallback(() => {
+    console.log(isSuggestionAtive);
+    return setIsSuggestionAtkive(!isSuggestionAtive);
+  }, [isSuggestionAtive]);
 
   const setProfilePictureFunc = React.useCallback(
     (picture) => {
@@ -190,6 +201,10 @@ export default function App() {
       setProfilePictureFunc,
       aktiveNewsLink,
       setAktiveNewsLinkFunc,
+      isSuggestionAtive,
+      toggleSuggestion,
+      currentUserName,
+      setCurrentUsernameFunc,
     }),
     [
       toggleTheme,
@@ -215,6 +230,10 @@ export default function App() {
       setProfilePictureFunc,
       aktiveNewsLink,
       setAktiveNewsLinkFunc,
+      isSuggestionAtive,
+      toggleSuggestion,
+      currentUserName,
+      setCurrentUsernameFunc,
     ]
   );
 
