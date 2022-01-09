@@ -17,6 +17,8 @@ import axios, { Axios } from "axios";
 import * as Device from "expo-device";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./FireBaseScreen";
 
 export const MainScreen = ({ scene, navigation, route }) => {
   const { colors } = useTheme();
@@ -41,13 +43,28 @@ export const MainScreen = ({ scene, navigation, route }) => {
 
   if (!isLogedIn) return <LoginModal />;
 
+  const _getUserFromFirebase = () => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        console.log(user);
+        const email = user.email;
+        setCurrentUsernameFunc(user.email);
+        // ...
+      } else {
+        // User is signed out
+        // ...
+      }
+    });
+  };
+
   const _getUserData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("User");
 
       const userdata = JSON.parse(jsonValue);
       if (userdata != null) {
-        setCurrentUsernameFunc(userdata.userName);
         return setCurrentUserData(userdata);
       } else {
         return setCurrentUserData({
@@ -97,7 +114,7 @@ export const MainScreen = ({ scene, navigation, route }) => {
   useMemo(() => _getUserData(), []);
   useMemo(() => _getStatusUpdate(), []);
   useMemo(() => _getUserImageFromLocal(), []);
-
+  useMemo(() => _getUserFromFirebase(), []);
   /**
      *   useEffect(() => {
     _getUserData();
@@ -249,7 +266,7 @@ export const MainScreen = ({ scene, navigation, route }) => {
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
                 Benutzername
               </Text>
-              <Text>{currentUserData.userName}</Text>
+              <Text>{currentUserName}</Text>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>Name</Text>
               <Text>
                 {currentUserData.firstName} {currentUserData.lastName}

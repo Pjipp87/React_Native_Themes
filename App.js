@@ -78,9 +78,12 @@ export default function App() {
     return setIsLogedIn(!isLogedIn);
   }, [isLogedIn]);
 
-  const setCurrentUsernameFunc = React.useCallback((name) => {
-    return setCurrentUsername(name);
-  });
+  const setCurrentUsernameFunc = React.useCallback(
+    (name) => {
+      return setCurrentUsername(name);
+    },
+    [currentUserName]
+  );
 
   const toggleMessage = React.useCallback(() => {
     return setGotMessage(!gotMessage);
@@ -252,28 +255,8 @@ export default function App() {
 
   //######################## Anmeldung
 
-  useEffect(() => {
-    signInWithEmailAndPassword(auth, "P.jipp87@gmail.com", "test123")
-      .then((user) => {
-        console.log("Eingelggt", user);
-        setIsAuthenticated(true);
-      })
-      .catch((error) => {
-        alert(error);
-        console.log("error: ", error);
-      });
-  }, []);
-
-  const SigninPageTemp = () => {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>Bitte Einloggen</Text>
-      </View>
-    );
-  };
-
   if (!isAuthenticated) {
-    return <SigninPageTemp login={() => setIsAuthenticated(true)} />;
+    return <SigninPage setIsAuthenticated={() => setIsAuthenticated(true)} />;
   }
 
   //########################################
