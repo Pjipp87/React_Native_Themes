@@ -15,7 +15,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "bundleIdentifier": "com.yourcompany.yourappname",
+      "bundleIdentifier": "com.pascaljipp.ersteapp",
       "buildNumber": "1.0.0",
       "supportsTablet": true
     },
