@@ -78,18 +78,7 @@ export default function App() {
 
   const addFriend = React.useCallback((item) => {
     //********************************************************
-    const storeOnline = async () => {
-      try {
-        const docRef = await addDoc(collection(db, "Friends"), {
-          first: "Nina",
-          last: "Schmidt",
-        });
-        console.log("Document written with ID: ", docRef.id);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    storeOnline();
+
     //############################################################
     return setFriendArray((friendArray) => [...friendArray, item]);
   });

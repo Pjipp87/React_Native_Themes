@@ -26,6 +26,9 @@ import axios, { Axios } from "axios";
 import * as Device from "expo-device";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "./FireBaseScreen";
+
 export const FriendSuggestionScreen = ({ scene, navigation, route }) => {
   const { colors } = useTheme();
   const { isLogedIn, toggleLogin } = React.useContext(PreferencesContext);
@@ -91,6 +94,8 @@ export const FriendSuggestionScreen = ({ scene, navigation, route }) => {
       -1
     ) {
       onToggleSnackBar(item);
+      _storeOnline(item);
+      //###########################################
       addFriend(item);
       setAktiveFriendFunc(item);
       if (friendsSuggestion.length !== 0) {
@@ -100,6 +105,21 @@ export const FriendSuggestionScreen = ({ scene, navigation, route }) => {
       }
     } else {
       alert("Kontakt bereits hinzugefügt!");
+    }
+  };
+
+  const _storeOnline = (item) => {
+    try {
+      const docRef = addDoc(collection(db, "Friends"), {
+        first: item.name.first,
+        last: item.name.last,
+        status: item.text,
+        email: item.email,
+        picture: item.picture.large,
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (error) {
+      console.log(error);
     }
   };
 
