@@ -26,7 +26,7 @@ import axios, { Axios } from "axios";
 import * as Device from "expo-device";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, setDoc, doc } from "firebase/firestore";
 import { db } from "./FireBaseScreen";
 
 export const FriendSuggestionScreen = ({
@@ -111,9 +111,9 @@ export const FriendSuggestionScreen = ({
     }
   };
 
-  const _storeOnline = (item) => {
+  const _storeOnline = async (item) => {
     try {
-      const docRef = addDoc(collection(db, "Friends"), {
+      await setDoc(doc(db, "Friends", `${item.name.first} ${item.name.last}`), {
         first: item.name.first,
         last: item.name.last,
         status: item.text,

@@ -30,7 +30,7 @@ export const FriendsScreen = ({ navigation }) => {
     let tempOnlineArray = [];
     const querySnapshot = await getDocs(collection(db, "Friends"));
     querySnapshot.forEach((doc) => {
-      tempOnlineArray.push(doc.data());
+      tempOnlineArray.push(Object.assign(doc.data(), doc.id));
     });
     setOnlineArray(tempOnlineArray);
     console.log("onlineArray: ", onlineArray);
