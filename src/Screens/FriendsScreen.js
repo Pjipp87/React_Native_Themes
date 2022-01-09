@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { FriendListItem } from "../components/FriendListItem";
 import { PreferencesContext } from "../utils/ThemeContext";
@@ -18,12 +18,27 @@ export const FriendsScreen = ({ navigation }) => {
 
   const [toggleSuggests, setToggleSuggests] = useState(false);
   const [onlineArray, setOnlineArray] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const _switchScreens = () => {
     setToggleSuggests(!toggleSuggests);
+    _getDataFromFirestore();
+  };
+  //#################### FireBase ########################
+
+  const _getDataFromFirestore = async () => {
+    let tempOnlineArray = [];
+    const querySnapshot = await getDocs(collection(db, "Friends"));
+    querySnapshot.forEach((doc) => {
+      tempOnlineArray.push(doc.data());
+    });
+    setOnlineArray(tempOnlineArray);
+    console.log("onlineArray: ", onlineArray);
   };
 
+  useEffect(() => _getDataFromFirestore(), []);
+
+  //######################################################
   if (toggleSuggests) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -35,54 +50,39 @@ export const FriendsScreen = ({ navigation }) => {
 
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  //#################### FireBase ########################
-
-  const _getDataFromFirestore = async () => {
-    const querySnapshot = await getDocs(collection(db, "Friends"));
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      //console.log(doc.id, " => ", doc.data());
-      setOnlineArray((onlineArray) => [...onlineArray], [doc.data()]);
-      console.log(onlineArray);
-      setIsLoading(false);
-    });
-  };
-
-  useEffect(() => {
-    _getDataFromFirestore();
-  }, []);
-
-  //######################################################
-
-  /**
-   * if (onlineArray.length === 0) {
+  if (onlineArray.length === 0) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text style={{ fontSize: 36, fontStyle: "italic" }}>
           Noch keine Kontakte
         </Text>
         <Button onPress={() => _switchScreens()}>Vorschläge anzeigen</Button>
+        <Button onPress={() => _getDataFromFirestore()}>Aktualisieren</Button>
       </View>
     );
   }
-   */
 
   if (isLoading) {
     return <Loading />;
+  } else {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <FlatList
+          data={onlineArray}
+          renderItem={({ item }) => (
+            <FriendListItem
+              friend={item}
+              firebase={() => _getDataFromFirestore}
+            />
+          )}
+          keyExtractor={(item) => item.id}
+        />
+
+        <Button onPress={() => _switchScreens()}>Vorschläge anzeigen</Button>
+        <Button onPress={() => _getDataFromFirestore()}>FireStore</Button>
+      </View>
+    );
   }
-
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <FlatList
-        data={onlineArray}
-        renderItem={({ item }) => <FriendListItem friend={item} />}
-        keyExtractor={(item) => item.login.uuid}
-      />
-
-      <Button onPress={() => _switchScreens()}>Vorschläge anzeigen</Button>
-      <Button onPress={() => _getDataFromFirestore()}>FireStore</Button>
-    </View>
-  );
 };
 
 const styles = StyleSheet.create({});

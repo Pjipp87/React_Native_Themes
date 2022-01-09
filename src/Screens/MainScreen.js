@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { StyleSheet, View, Pressable, useWindowDimensions } from "react-native";
 import styled from "styled-components";
 import {
@@ -42,7 +42,7 @@ export const MainScreen = ({ scene, navigation, route }) => {
   const _getUserData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("User");
-      console.log("geklappt:", JSON.parse(jsonValue));
+
       const userdata = JSON.parse(jsonValue);
       if (userdata != null) {
         return setCurrentUserData(userdata);
@@ -64,7 +64,7 @@ export const MainScreen = ({ scene, navigation, route }) => {
   const _getUserImageFromLocal = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("Picture");
-      console.log("geklappt:", JSON.parse(jsonValue));
+
       const picture = JSON.parse(jsonValue);
       if (picture != null) {
         return setProfilePicture(picture);
@@ -79,7 +79,7 @@ export const MainScreen = ({ scene, navigation, route }) => {
   const _getStatusUpdate = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("Status");
-      console.log("geklappt:", JSON.parse(jsonValue));
+
       const newStatus = JSON.parse(jsonValue);
       if (newStatus != null) {
         return setstatusMessage(newStatus);
@@ -90,15 +90,26 @@ export const MainScreen = ({ scene, navigation, route }) => {
       console.log(error);
     }
   };
-  const isFocused = navigation.isFocused();
-  useEffect(() => {
+
+  useMemo(() => _getUserData(), []);
+  useMemo(() => _getStatusUpdate(), []);
+  useMemo(() => _getUserImageFromLocal(), []);
+  useMemo(
+    () =>
+      setTimeout(() => {
+        setVisibleBanner(true);
+      }, 1500),
+    []
+  );
+
+  /**
+     *   useEffect(() => {
     _getUserData();
     _getStatusUpdate();
     _getUserImageFromLocal();
-    setTimeout(() => {
-      setVisibleBanner(true);
-    }, 1500);
+    ;
   }, [!currentUserData, !statusMessage, !profilePicture]);
+     */
 
   //###################
 

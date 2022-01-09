@@ -6,7 +6,7 @@ import { Dimensions } from "react-native";
 import { PreferencesContext } from "../utils/ThemeContext";
 
 export const FriendListItem = ({ friend }) => {
-  const { name, dob, picture, email, text } = friend;
+  const { first, last, picture, email, status } = friend;
 
   const { toggleInfoModal, setAktiveFriendFunc } =
     React.useContext(PreferencesContext);
@@ -41,7 +41,7 @@ export const FriendListItem = ({ friend }) => {
         <Avatar.Image
           size={60}
           source={{
-            uri: picture.large,
+            uri: picture,
           }}
         />
         <View
@@ -49,7 +49,7 @@ export const FriendListItem = ({ friend }) => {
         >
           <View style={{ paddingLeft: 20 }}>
             <Text style={{ fontSize: 24, fontWeight: "bold" }}>
-              {name.first} {name.last}
+              {first} {last}
             </Text>
 
             <Text
@@ -57,7 +57,7 @@ export const FriendListItem = ({ friend }) => {
             >
               {email}
             </Text>
-            <Text style={{ fontSize: 16, textAlign: "center" }}>{text}</Text>
+            <Text style={{ fontSize: 16, textAlign: "center" }}>{status}</Text>
           </View>
         </View>
         <IconButton

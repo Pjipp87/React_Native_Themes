@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   StyleSheet,
   View,
@@ -29,7 +29,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "./FireBaseScreen";
 
-export const FriendSuggestionScreen = ({ scene, navigation, route }) => {
+export const FriendSuggestionScreen = ({
+  scene,
+  navigation,
+  route,
+  firebase,
+}) => {
   const { colors } = useTheme();
   const { isLogedIn, toggleLogin } = React.useContext(PreferencesContext);
   const [visibleSnackbar, setVisibleSnackbar] = React.useState(false);
@@ -81,9 +86,7 @@ export const FriendSuggestionScreen = ({ scene, navigation, route }) => {
     );
   };
 
-  useEffect(() => {
-    _getApiResponse();
-  }, [!friendsSuggestion]);
+  useMemo(() => _getApiResponse(), []);
 
   //###################
 
@@ -116,6 +119,7 @@ export const FriendSuggestionScreen = ({ scene, navigation, route }) => {
         status: item.text,
         email: item.email,
         picture: item.picture.large,
+        id: item.login.uuid,
       });
       console.log("Document written with ID: ", docRef.id);
     } catch (error) {
