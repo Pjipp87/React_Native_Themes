@@ -113,6 +113,7 @@ export const FriendSuggestionScreen = ({
 
   const _storeOnline = async (item) => {
     try {
+      //##########################################################################################
       await setDoc(doc(db, "Friends", `${item.name.first} ${item.name.last}`), {
         first: item.name.first,
         last: item.name.last,
