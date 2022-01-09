@@ -15,19 +15,22 @@ import {
   DarkTheme as PaperDarkTheme,
   DefaultTheme as PaperDefaultTheme,
   Provider as PaperProvider,
+  Text,
+  TextInput,
 } from "react-native-paper";
 import merge from "deepmerge";
 import { PreferencesContext } from "./src/utils/ThemeContext";
 import * as Icon from "@expo/vector-icons";
 import ViewComponent from "./src/components/ViewComponent";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { View } from "react-native-web";
 import RegisterComponent from "./src/components/RegisterComponent";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { FriendSuggestionScreen } from "./src/Screens/FriendSuggestionScreen";
-
-import { db } from "./src/Screens/FireBaseScreen";
-import { collection, addDoc } from "firebase/firestore";
+import { SigninPage } from "./src/Screens/SigninPage";
+import { app } from "./src/Screens/FireBaseScreen";
+import { auth } from "./src/Screens/FireBaseScreen";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { useEffect } from "react";
+import { View } from "react-native";
 
 const CombinedDefaultTheme = merge(PaperDefaultTheme, NavigationDefaultTheme);
 const CombinedDarkTheme = merge(PaperDarkTheme, NavigationDarkTheme);
@@ -56,6 +59,7 @@ export default function App() {
   const [aktiveNewsLink, setAktiveNewsLink] = useState("");
   const [isSuggestionAtive, setIsSuggestionAtkive] = useState(false);
   const [currentUserName, setCurrentUsername] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
 
@@ -245,6 +249,34 @@ export default function App() {
       </Stack.Navigator>
     );
   }
+
+  //######################## Anmeldung
+
+  useEffect(() => {
+    signInWithEmailAndPassword(auth, "P.jipp87@gmail.com", "test123")
+      .then((user) => {
+        console.log("Eingelggt", user);
+        setIsAuthenticated(true);
+      })
+      .catch((error) => {
+        alert(error);
+        console.log("error: ", error);
+      });
+  }, []);
+
+  const SigninPageTemp = () => {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>Bitte Einloggen</Text>
+      </View>
+    );
+  };
+
+  if (!isAuthenticated) {
+    return <SigninPageTemp login={() => setIsAuthenticated(true)} />;
+  }
+
+  //########################################
 
   return (
     <PreferencesContext.Provider value={preferences}>
