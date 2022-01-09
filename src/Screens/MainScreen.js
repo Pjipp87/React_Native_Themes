@@ -27,7 +27,7 @@ export const MainScreen = ({ scene, navigation, route }) => {
     setStatusFunc,
     setUserinformationFunc,
   } = React.useContext(PreferencesContext);
-  const [visibleBanner, setVisibleBanner] = React.useState(false);
+  const [visibleBanner, setVisibleBanner] = React.useState();
   const [currentUserData, setCurrentUserData] = useState({});
   const [statusModal, setStatusModal] = useState(false);
   const [statusMessage, setstatusMessage] = useState("");
@@ -94,13 +94,6 @@ export const MainScreen = ({ scene, navigation, route }) => {
   useMemo(() => _getUserData(), []);
   useMemo(() => _getStatusUpdate(), []);
   useMemo(() => _getUserImageFromLocal(), []);
-  useMemo(
-    () =>
-      setTimeout(() => {
-        setVisibleBanner(true);
-      }, 1500),
-    []
-  );
 
   /**
      *   useEffect(() => {
