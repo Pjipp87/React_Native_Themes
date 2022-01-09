@@ -26,7 +26,7 @@ export const FriendInfoModal = ({ scene }) => {
   const createTwoButtonAlert = () =>
     Alert.alert(
       "Achtung!",
-      `${aktiveFriend.name.first} ${aktiveFriend.name.last} wird entfernt`,
+      `${aktiveFriend.first} ${aktiveFriend.last} wird entfernt`,
       [
         {
           text: "Abbrechen",
@@ -69,12 +69,12 @@ export const FriendInfoModal = ({ scene }) => {
 
   return (
     <Modal
-      visible={true}
+      visible={showInfoModal}
       contentContainerStyle={{ flex: 1, backgroundColor: colors.background }}
     >
       <View style={{ flex: 1, paddingTop: 25 }}>
         <Image
-          source={{ uri: aktiveFriend.picture.large }}
+          source={{ uri: aktiveFriend.picture }}
           style={{
             width: useWindowDimensions().width * 0.5,
             height: useWindowDimensions().width * 0.5,
@@ -93,7 +93,7 @@ export const FriendInfoModal = ({ scene }) => {
             fontWeight: "bold",
           }}
         >
-          {aktiveFriend.name.first} {aktiveFriend.name.last}
+          {aktiveFriend.first} {aktiveFriend.last}
         </Text>
         <Text
           style={{
@@ -114,7 +114,7 @@ export const FriendInfoModal = ({ scene }) => {
         >
           <Text style={{ paddingRight: 20 }}>Status:</Text>
           <Text style={{ width: useWindowDimensions().width * 0.7 }}>
-            {aktiveFriend.text}
+            {aktiveFriend.status}
           </Text>
         </View>
       </View>

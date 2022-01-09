@@ -12,7 +12,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "./FireBaseScreen";
 
 export const FriendsScreen = ({ navigation }) => {
-  const { friendArray } = React.useContext(PreferencesContext);
+  const { friendArray, showInfoModal } = React.useContext(PreferencesContext);
 
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -64,6 +64,8 @@ export const FriendsScreen = ({ navigation }) => {
 
   if (isLoading) {
     return <Loading />;
+  } else if (showInfoModal) {
+    return <FriendInfoModal />;
   } else {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>

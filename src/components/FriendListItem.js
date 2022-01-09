@@ -8,13 +8,14 @@ import { PreferencesContext } from "../utils/ThemeContext";
 export const FriendListItem = ({ friend }) => {
   const { first, last, picture, email, status } = friend;
 
-  const { toggleInfoModal, setAktiveFriendFunc } =
+  const { toggleInfoModal, setAktiveFriendFunc, showInfoModal } =
     React.useContext(PreferencesContext);
 
   const _showInfo = () => {
     Vibration.vibrate(50);
     setAktiveFriendFunc(friend);
     toggleInfoModal();
+    console.log(showInfoModal);
   };
 
   const windowWidth = Dimensions.get("window").width;
