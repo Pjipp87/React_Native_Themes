@@ -242,7 +242,7 @@ export default function App() {
   //######################## Anmeldung
 
   const _toogleLoningScreen = () => {
-    setIsAuthenticated(true);
+    setIsAuthenticated(!isAuthenticated);
   };
 
   if (!isAuthenticated) {
@@ -265,7 +265,7 @@ export default function App() {
               tabBarIcon: ({ focused, color, size }) => {
                 let iconName;
 
-                if (route.name === "Startseite") {
+                if (route.name === "Profil") {
                   //iconName = focused ? "home" : "home-outline";
                   iconName = "home";
                 } else if (route.name === "Neuigkeiten") {
@@ -295,7 +295,13 @@ export default function App() {
               tabBarInactiveTintColor: "gray",
             })}
           >
-            <Tab.Screen name="Profil" component={MainScreen} />
+            <Tab.Screen
+              name="Profil"
+              component={MainScreen}
+              initialParams={{
+                setIsAuthenticated: () => _toogleLoningScreen(),
+              }}
+            />
             <Tab.Screen name="Neuigkeiten" component={NewsScreen} />
             <Tab.Screen name="Kontakte" component={FriendsScreen} />
             <Tab.Screen

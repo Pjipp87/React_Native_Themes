@@ -7,7 +7,7 @@ import {
   View,
   Pressable,
 } from "react-native";
-import { Surface, List, Headline, Title, Subheading } from "react-native-paper";
+import { Surface, List, Button, Title, Subheading } from "react-native-paper";
 import { PreferencesContext } from "../utils/ThemeContext";
 
 export default function NewsList({ newsArray, tootlgeWebView }) {
@@ -52,9 +52,9 @@ export default function NewsList({ newsArray, tootlgeWebView }) {
           <List.Item
             title={newsArray.description}
             description={
-              <Pressable onPress={() => _gotToWebsite(newsArray.url)}>
-                <Title style={{ color: "blue" }}>Link zur Website</Title>
-              </Pressable>
+              <Button onPress={() => _gotToWebsite(newsArray.url)}>
+                Zur Webseite
+              </Button>
             }
             titleNumberOfLines={100}
             style={{ justifyContent: "center" }}

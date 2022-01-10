@@ -5,12 +5,12 @@ import { Button, Headline, Avatar, TextInput, Text } from "react-native-paper";
 import { PreferencesContext } from "../utils/ThemeContext";
 import * as Device from "expo-device";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "./FireBaseScreen";
 import { db } from "./FireBaseScreen";
 import { setDoc, doc, updateDoc, getDoc } from "firebase/firestore";
 
-export const MainScreen = () => {
+export const MainScreen = ({ route }) => {
   const { colors } = useTheme();
   const { setStatusFunc, currentUserName, setCurrentUsernameFunc } =
     React.useContext(PreferencesContext);
@@ -19,6 +19,7 @@ export const MainScreen = () => {
   const [statusMessage, setstatusMessage] = useState("");
   const [newStatusMessage, setnewStatusMessage] = useState("");
   const window = useWindowDimensions();
+  const { setIsAuthenticated } = route.params;
 
   useEffect(() => {
     let isMounted = true;
@@ -100,6 +101,17 @@ export const MainScreen = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const _logOut = () => {
+    signOut(auth)
+      .then(() => {
+        console.log("Benutzer ausgeloggt");
+        setIsAuthenticated();
+      })
+      .catch((error) => {
+        // An error happened.
+      });
   };
 
   return (
@@ -220,10 +232,7 @@ export const MainScreen = () => {
               paddingBottom: 20,
             }}
           >
-            <Button
-              onPress={() => alert("Noch nicht implementiert!")}
-              color="red"
-            >
+            <Button onPress={() => _logOut()} color="red">
               Logout
             </Button>
             <Button onPress={() => _showStatusModal()}>Status ändern</Button>
