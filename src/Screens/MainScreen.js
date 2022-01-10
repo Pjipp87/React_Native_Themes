@@ -22,14 +22,8 @@ export const MainScreen = ({ route }) => {
   const { setIsAuthenticated } = route.params;
 
   useEffect(() => {
-    let isMounted = true;
-    if (isMounted) {
-      _getUserFromFirebase();
-      _getStatusUpdate();
-    }
-    return () => {
-      isMounted = false;
-    };
+    _getUserFromFirebase();
+    _getStatusUpdate();
   }, []);
 
   const _getUserFromFirebase = () => {
@@ -63,6 +57,7 @@ export const MainScreen = ({ route }) => {
           name: user.displayName,
           username: user.email,
           picture: user.photoURL,
+          id: user.uid,
         },
         { merge: true }
       );
@@ -79,7 +74,6 @@ export const MainScreen = ({ route }) => {
   const _getStatusUpdate = async () => {
     const querySnapshot = await getDoc(doc(db, `Users`, `${currentUserName}`));
     setstatusMessage(querySnapshot.data().status);
-    console.log("onlineArray: ", querySnapshot.data().status);
   };
 
   const _setStatus = () => {
