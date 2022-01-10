@@ -26,11 +26,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import RegisterComponent from "./src/components/RegisterComponent";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SigninPage } from "./src/Screens/SigninPage";
-import { app } from "./src/Screens/FireBaseScreen";
 import { auth } from "./src/Screens/FireBaseScreen";
-import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
-import { useEffect } from "react";
-import { View } from "react-native";
 
 const CombinedDefaultTheme = merge(PaperDefaultTheme, NavigationDefaultTheme);
 const CombinedDarkTheme = merge(PaperDarkTheme, NavigationDarkTheme);
@@ -47,8 +43,7 @@ export default function App() {
   const [showInfoModal, setshowInfoModal] = useState(false);
   const [aktiveFriend, setAktiveFriend] = useState(null);
   const [userInformation, setsetuserInformation] = useState({
-    firstname: "",
-    lastname: "",
+    name: "",
     username: "",
     password: "",
     picture: "../../mock/Image/ProfilePicture.png",
@@ -256,7 +251,12 @@ export default function App() {
   //######################## Anmeldung
 
   if (!isAuthenticated) {
-    return <SigninPage setIsAuthenticated={() => setIsAuthenticated(true)} />;
+    return (
+      <SigninPage
+        auth={auth}
+        setIsAuthenticated={() => setIsAuthenticated(true)}
+      />
+    );
   }
 
   //########################################

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "129743817987",
+    "project_id": "react-native-themes",
+    "storage_bucket": "react-native-themes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:129743817987:android:74f4cee8cdba5507ba2d36",
+        "android_client_info": {
+          "package_name": "com.pascaljipp.ersteapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "129743817987-7vicedqtosjs1sheistcrq4eqf0a6gob.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD38wfchPP5_bBFi26Z-xpgWGnOy4WPQJE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "129743817987-7vicedqtosjs1sheistcrq4eqf0a6gob.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

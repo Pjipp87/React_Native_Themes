@@ -15,8 +15,7 @@ export const PreferencesContext = React.createContext({
   ativeFriend: null,
   setAktiveFriendFunc: () => {},
   userInformation: {
-    firstname: "",
-    lastname: "",
+    name: "",
     username: "",
     password: "",
     picture: "../../mock/Image/ProfilePicture.png",
