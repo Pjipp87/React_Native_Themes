@@ -8,7 +8,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "./FireBaseScreen";
 import { db } from "./FireBaseScreen";
-import { setDoc, doc, updateDoc, getDoc } from "firebase/firestore";
+import {
+  setDoc,
+  doc,
+  updateDoc,
+  getDoc,
+  getDocs,
+  collection,
+} from "firebase/firestore";
 
 export const MainScreen = ({ route }) => {
   const { colors } = useTheme();
@@ -22,25 +29,27 @@ export const MainScreen = ({ route }) => {
   const { setIsAuthenticated } = route.params;
 
   useEffect(() => {
+    //_getStatusUpdate();
     _getUserFromFirebase();
-    _getStatusUpdate();
   }, []);
 
-  const _getUserFromFirebase = () => {
+  //useMemo(() => _getStatusUpdate(), []);
+  //useMemo(() => _getStatusUpdate, []);
+
+  const _getUserFromFirebase = async () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         //console.log(user);
+        _getStatusUpdate();
         setCurrentUsernameFunc(user.email);
         setCurrentUserData({
           name: user.displayName,
           username: user.email,
-          password: "",
           picture: user.photoURL,
           id: user.uid,
         });
 
         _setFriendOnline(user);
-
         // ...
       } else {
         // User is signed out
@@ -85,13 +94,9 @@ export const MainScreen = ({ route }) => {
 
   const _setStatusOnline = async (statusMessage) => {
     try {
-      await updateDoc(
-        doc(db, `Users`, `${currentUserName}`),
-        {
-          status: statusMessage,
-        },
-        { merge: true }
-      );
+      await updateDoc(doc(db, `Users`, `${currentUserName}`), {
+        status: statusMessage,
+      });
       console.log("saved Status");
     } catch (error) {
       console.log(error);
