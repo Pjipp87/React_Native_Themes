@@ -42,6 +42,7 @@ export const MainScreen = ({ route }) => {
           username: user.email,
           password: "",
           picture: user.photoURL,
+          id: user.uid,
         });
 
         _setFriendOnline(user);

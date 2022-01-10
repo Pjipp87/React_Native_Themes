@@ -26,7 +26,7 @@ import axios, { Axios } from "axios";
 import * as Device from "expo-device";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { collection, addDoc, setDoc, doc } from "firebase/firestore";
+import { collection, addDoc, setDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "./FireBaseScreen";
 
 export const FriendSuggestionScreen = ({
@@ -52,6 +52,8 @@ export const FriendSuggestionScreen = ({
   const [showProfilPicture, setShowProfilPicture] = useState(false);
   const [profilePicture, setprofilePicture] = useState("");
 
+  const [googleFriendsSuggests, setGoogleFriendsSuggests] = useState([]);
+
   const [tempItem, setTempItem] = useState(null);
 
   const onToggleSnackBar = (item) => {
@@ -66,7 +68,9 @@ export const FriendSuggestionScreen = ({
   if (!isLogedIn) return <LoginModal />;
 
   // Fetch API
-  const urls = [
+  /**
+ * 
+ *   const urls = [
     "https://goquotes-api.herokuapp.com/api/v1/random?count=20",
     "https://randomuser.me/api/?results=20&gender=male",
   ];
@@ -87,7 +91,8 @@ export const FriendSuggestionScreen = ({
     );
   };
 
-  useMemo(() => _getApiResponse(), []);
+  useMemo(() => _getApiResponse(), []); 
+ */
 
   //###################
 
@@ -115,7 +120,6 @@ export const FriendSuggestionScreen = ({
 
   const _storeOnline = async (item) => {
     try {
-      //##########################################################################################
       await setDoc(
         doc(db, `${currentUserName}_Friends`, `${item.login.uuid}`),
         {
@@ -153,24 +157,39 @@ export const FriendSuggestionScreen = ({
     );
   };
 
+  const _getFreindListFromFirestore = async () => {
+    let tempOnlineArray = [];
+    const querySnapshot = await getDocs(collection(db, `Users`));
+    querySnapshot.forEach((doc) => {
+      tempOnlineArray.push(doc.data());
+    });
+    setGoogleFriendsSuggests(tempOnlineArray);
+    setisLoading(false);
+    console.log("GoofleArray: ", googleFriendsSuggests);
+  };
+
+  useMemo(() => _getFreindListFromFirestore(), []);
+
   const SuggestionList = () => {
     return (
       <>
+        <Button onPress={() => toggleSuggestion()}>Zurück</Button>
+        <Button onPress={() => _getFreindListFromFirestore()}>
+          Google Freunde
+        </Button>
         <FlatList
-          data={friendsSuggestion}
+          data={googleFriendsSuggests}
           renderItem={({ item }) => (
             <FriendSuggest
               friend={item}
               onAdd={() => _onAdd(item)}
-              showModal={() => _showModal(item.picture.large)}
+              showModal={() => _showModal(item.picture)}
             />
           )}
-          keyExtractor={(item) => item.login.uuid}
+          // keyExtractor={(item) => item.id}
           refreshing={isLoading}
           onRefresh={() => _refresh()}
         />
-        <Button onPress={() => toggleSuggestion()}>Zurück</Button>
-
         <Snackbar
           duration={3000}
           visible={visibleSnackbar}

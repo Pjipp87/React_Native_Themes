@@ -6,8 +6,8 @@ import { Dimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "react-native-paper";
 
-export const FriendSuggest = ({ friend, onAdd, showModal }) => {
-  const { name, picture, status } = friend;
+export const GoogleFriends = ({ friend, onAdd, showModal }) => {
+  const { name, picture } = friend;
 
   const { theme } = useTheme();
 
@@ -30,7 +30,7 @@ export const FriendSuggest = ({ friend, onAdd, showModal }) => {
         <Avatar.Image
           size={60}
           source={{
-            uri: picture,
+            uri: picture.large,
           }}
         />
       </Pressable>
@@ -58,7 +58,7 @@ export const FriendSuggest = ({ friend, onAdd, showModal }) => {
               textAlign: "left",
             }}
           >
-            {name}
+            {name.first} {name.last}
           </Title>
 
           <IconButton icon="account-plus" size={35} onPress={onAdd} />
@@ -74,9 +74,3 @@ const styles = StyleSheet.create({
     height: 80,
   },
 });
-
-/**
- * <Pressable onPress={() => alert("Funktion: add")}>
-            <Ionicons name="person-add" size={35} color="black" />
-          </Pressable>
- */
