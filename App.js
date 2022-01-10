@@ -239,22 +239,17 @@ export default function App() {
     ]
   );
 
-  function Root() {
-    return (
-      <Stack.Navigator>
-        <Stack.Screen name="Profil" component={MainScreen} />
-        <Stack.Screen name="Registrierung" component={RegisterComponent} />
-      </Stack.Navigator>
-    );
-  }
-
   //######################## Anmeldung
+
+  const _toogleLoningScreen = () => {
+    setIsAuthenticated(true);
+  };
 
   if (!isAuthenticated) {
     return (
       <SigninPage
         auth={auth}
-        setIsAuthenticated={() => setIsAuthenticated(true)}
+        setIsAuthenticated={() => _toogleLoningScreen()}
       />
     );
   }
@@ -300,11 +295,7 @@ export default function App() {
               tabBarInactiveTintColor: "gray",
             })}
           >
-            <Tab.Screen
-              name="Startseite"
-              options={{ headerShown: false }}
-              component={Root}
-            />
+            <Tab.Screen name="Profil" component={MainScreen} />
             <Tab.Screen name="Neuigkeiten" component={NewsScreen} />
             <Tab.Screen name="Kontakte" component={FriendsScreen} />
             <Tab.Screen
