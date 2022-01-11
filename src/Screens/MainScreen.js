@@ -50,6 +50,7 @@ export const MainScreen = ({ route }) => {
         });
 
         _setFriendOnline(user);
+        _setUserList(user);
         // ...
       } else {
         // User is signed out
@@ -67,10 +68,23 @@ export const MainScreen = ({ route }) => {
           username: user.email,
           picture: user.photoURL,
           id: user.uid,
-        },
-        { merge: false }
+        }
       );
       console.log("saved User");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const _setUserList = async (user) => {
+    try {
+      await setDoc(doc(db, `Users`, `${currentUserName}`), {
+        name: user.displayName,
+        username: user.email,
+        picture: user.photoURL,
+        id: user.uid,
+      });
+      console.log("saved User on List");
     } catch (error) {
       console.log(error);
     }

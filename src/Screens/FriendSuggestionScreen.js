@@ -98,7 +98,10 @@ export const FriendSuggestionScreen = ({
 
   const _onAdd = (item) => {
     Vibration.vibrate(100);
-    if (
+    _storeOnline(item);
+    getFromFirestore();
+    /**
+     * if (
       friendArray.findIndex((index) => index.login.uuid === item.login.uuid) ===
       -1
     ) {
@@ -116,25 +119,49 @@ export const FriendSuggestionScreen = ({
     } else {
       alert("Kontakt bereits hinzugefügt!");
     }
+     */
   };
 
   const _storeOnline = async (item) => {
+    console.log("item", item);
     try {
       await setDoc(
-        doc(db, `${currentUserName}_Friends`, `${item.login.uuid}`),
+        doc(
+          db,
+          `ChatPool`,
+          `Users`,
+          `${currentUserName}`,
+          `Data`,
+          `Freunde`,
+          `${item.name}`
+        ),
         {
-          first: item.name.first,
-          last: item.name.last,
-          status: item.text,
-          email: item.email,
-          picture: item.picture.large,
-          id: item.login.uuid,
+          name: item.name,
+          picture: item.picture,
+          username: item.username,
+          id: item.id,
         }
       );
     } catch (error) {
       console.log(error);
     }
   };
+
+  /**
+   *  const _setStatusOnline = async (statusMessage) => {
+    try {
+      await setDoc(
+        doc(db, `ChatPool`, `Users`, `${currentUserName}`, `Status`),
+        {
+          status: statusMessage,
+        }
+      );
+      console.log("saved Status");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+   */
 
   const _refresh = () => {
     setisLoading(true);
