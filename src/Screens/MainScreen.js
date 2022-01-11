@@ -29,7 +29,7 @@ export const MainScreen = ({ route }) => {
   const { setIsAuthenticated } = route.params;
 
   useEffect(() => {
-    //_getStatusUpdate();
+    _getStatusUpdate();
     _getUserFromFirebase();
   }, []);
 
@@ -61,14 +61,14 @@ export const MainScreen = ({ route }) => {
   const _setFriendOnline = async (user) => {
     try {
       await setDoc(
-        doc(db, `Users`, `${currentUserName}`),
+        doc(db, `ChatPool`, `Users`, `${currentUserName}`, `Profil`),
         {
           name: user.displayName,
           username: user.email,
           picture: user.photoURL,
           id: user.uid,
         },
-        { merge: true }
+        { merge: false }
       );
       console.log("saved User");
     } catch (error) {
@@ -81,7 +81,9 @@ export const MainScreen = ({ route }) => {
   };
 
   const _getStatusUpdate = async () => {
-    const querySnapshot = await getDoc(doc(db, `Users`, `${currentUserName}`));
+    const querySnapshot = await getDoc(
+      doc(db, `ChatPool`, `Users`, `${currentUserName}`, `Status`)
+    );
     setstatusMessage(querySnapshot.data().status);
   };
 
@@ -94,9 +96,12 @@ export const MainScreen = ({ route }) => {
 
   const _setStatusOnline = async (statusMessage) => {
     try {
-      await updateDoc(doc(db, `Users`, `${currentUserName}`), {
-        status: statusMessage,
-      });
+      await setDoc(
+        doc(db, `ChatPool`, `Users`, `${currentUserName}`, `Status`),
+        {
+          status: statusMessage,
+        }
+      );
       console.log("saved Status");
     } catch (error) {
       console.log(error);
