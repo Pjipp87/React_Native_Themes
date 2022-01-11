@@ -1,5 +1,6 @@
 {
   "expo": {
+    "jsEngine": "hermes",
     "name": "React_Native_Themes",
     "slug": "React_Native_Themes",
     "version": "1.0.0",
@@ -21,6 +22,7 @@
     },
     "android": {
       "package": "com.pascaljipp.ersteapp",
+      "googleServicesFile": "./google-services.json",
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
