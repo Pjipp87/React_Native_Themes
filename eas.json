@@ -16,7 +16,8 @@
     "production": {
       "android": {
         "serviceAccountKeyPath": "./pc-api-6740458192353947936-580-8d347c5652d5.json",
-        "track": "internal"
+        "track": "internal",
+        "releaseStatus": "draft"
       },
       "ios": {
         "appleId": "john@turtle.com",
