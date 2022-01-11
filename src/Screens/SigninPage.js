@@ -20,14 +20,14 @@ export const SigninPage = ({ setIsAuthenticated, auth }) => {
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
     expoClientId:
       // Funktionierender KEY
-      "129743817987-7vicedqtosjs1sheistcrq4eqf0a6gob.apps.googleusercontent.com",
+      "136968103658-22hv9fa91qtfte1pvq38fknoq7q996em.apps.googleusercontent.com",
     iosClientId:
-      "129743817987-7vicedqtosjs1sheistcrq4eqf0a6gob.apps.googleusercontent.com",
+      "136968103658-5n8298t5tgmg7gdi5ae0h1pf3mh837a6.apps.googleusercontent.com",
     androidClientId:
-      "129743817987-7vicedqtosjs1sheistcrq4eqf0a6gob.apps.googleusercontent.com",
+      "136968103658-5n8298t5tgmg7gdi5ae0h1pf3mh837a6.apps.googleusercontent.com",
     //  "136968103658-22hv9fa91qtfte1pvq38fknoq7q996em.apps.googleusercontent.com",
     webClientId:
-      "129743817987-7vicedqtosjs1sheistcrq4eqf0a6gob.apps.googleusercontent.com",
+      "136968103658-5n8298t5tgmg7gdi5ae0h1pf3mh837a6.apps.googleusercontent.com",
   });
 
   const login = (email, password) => {
