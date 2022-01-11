@@ -7,22 +7,43 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:129743817987:android:7c75975133a52b3bba2d36",
+        "mobilesdk_app_id": "1:129743817987:android:e0d9ef17f06f774fba2d36",
         "android_client_info": {
           "package_name": "com.pascaljipp.ersteapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "136968103658-5n8298t5tgmg7gdi5ae0h1pf3mh837a6.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.pascaljipp.ersteapp",
-            "certificate_hash": "1ddbda93b756478d20cd183432b2fae4423acb73"
-          }
-        },
+          "client_id": "129743817987-7vicedqtosjs1sheistcrq4eqf0a6gob.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
         {
-          "client_id": "136968103658-5n8298t5tgmg7gdi5ae0h1pf3mh837a6.apps.googleusercontent.com",
+          "current_key": "AIzaSyD38wfchPP5_bBFi26Z-xpgWGnOy4WPQJE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "129743817987-7vicedqtosjs1sheistcrq4eqf0a6gob.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:129743817987:android:a84a4f75aeae4606ba2d36",
+        "android_client_info": {
+          "package_name": "com.pascaljipp.ersteapp2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "129743817987-7vicedqtosjs1sheistcrq4eqf0a6gob.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

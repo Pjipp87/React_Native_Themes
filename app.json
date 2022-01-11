@@ -17,14 +17,14 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "bundleIdentifier": "com.pascaljipp.ersteapp",
+      "bundleIdentifier": "com.pascaljipp.ersteapp2",
       "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "android": {
-      "package": "com.pascaljipp.ersteapp",
+      "package": "com.pascaljipp.ersteapp2",
       "googleServicesFile": "./google-services.json",
-      "versionCode": 4,
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
