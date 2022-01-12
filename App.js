@@ -85,9 +85,6 @@ export default function App() {
   }, [gotMessage]);
 
   const addFriend = React.useCallback((item) => {
-    //********************************************************
-
-    //############################################################
     return setFriendArray((friendArray) => [...friendArray, item]);
   });
 

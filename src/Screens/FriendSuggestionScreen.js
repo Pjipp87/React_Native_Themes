@@ -26,7 +26,15 @@ import axios, { Axios } from "axios";
 import * as Device from "expo-device";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { collection, addDoc, setDoc, doc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  setDoc,
+  doc,
+  getDocs,
+  where,
+  query,
+} from "firebase/firestore";
 import { db } from "./FireBaseScreen";
 
 export const FriendSuggestionScreen = ({
@@ -51,8 +59,8 @@ export const FriendSuggestionScreen = ({
   } = React.useContext(PreferencesContext);
   const [showProfilPicture, setShowProfilPicture] = useState(false);
   const [profilePicture, setprofilePicture] = useState("");
-
   const [googleFriendsSuggests, setGoogleFriendsSuggests] = useState([]);
+  const [userFriends, setUserFriends] = useState([]);
 
   const [tempItem, setTempItem] = useState(null);
 
@@ -61,11 +69,13 @@ export const FriendSuggestionScreen = ({
     setTempItem(item);
   };
 
+  useEffect(() => {
+    _getFreindListFromFirestore();
+  }, []);
+
   const window = useWindowDimensions();
 
   const onDismissSnackBar = () => setVisibleSnackbar(false);
-
-  if (!isLogedIn) return <LoginModal />;
 
   // Fetch API
   /**
@@ -98,31 +108,82 @@ export const FriendSuggestionScreen = ({
 
   const _onAdd = (item) => {
     Vibration.vibrate(100);
-    _storeOnline(item);
-    getFromFirestore();
-    /**
-     * if (
-      friendArray.findIndex((index) => index.login.uuid === item.login.uuid) ===
-      -1
-    ) {
+
+    if (userFriends.findIndex((index) => index.id === item.id) === -1) {
       onToggleSnackBar(item);
-      _storeOnline(item);
       //###########################################
-      addFriend(item);
+      //addFriend(item);
       setAktiveFriendFunc(item);
-      if (friendsSuggestion.length !== 0) {
-        let tempArray = friendsSuggestion;
+      if (userFriends.length !== 0) {
+        let tempArray = googleFriendsSuggests;
         tempArray.splice(tempArray.indexOf(item), 1);
-        setfriendsSuggestion(tempArray);
+        setGoogleFriendsSuggests(tempArray);
       }
-      getFromFirestore();
+      _storeFriendsOnline(item);
+      _getFreindListFromFirestore();
+      _getUserFreinds();
     } else {
       alert("Kontakt bereits hinzugefügt!");
     }
-     */
   };
 
-  const _storeOnline = async (item) => {
+  const _getFreindListFromFirestore = async () => {
+    let tempOnlineArray1 = [];
+    const querySnapshot1 = await getDocs(
+      collection(
+        db,
+        `ChatPool`,
+        `Users`,
+        `${currentUserName}`,
+        `Data`,
+        `Freunde`
+      )
+    );
+    querySnapshot1.forEach((doc) => {
+      //console.log("doc", doc.data());
+      tempOnlineArray1.push(doc.data().id);
+    });
+    setUserFriends(tempOnlineArray1);
+    console.log("userFriends:", userFriends);
+
+    let tempOnlineArray = [];
+    const querySnapshot = await getDocs(
+      query(collection(db, `Users`), where("id", "not-in", userFriends))
+    );
+    querySnapshot.forEach((doc) => {
+      console.log("id request".doc);
+      tempOnlineArray.push(doc.data());
+    });
+
+    setGoogleFriendsSuggests(tempOnlineArray);
+    setisLoading(false);
+  };
+
+  /**
+  * 
+  *  const _getUserFreinds = async () => {
+    let tempOnlineArray = [];
+    const querySnapshot = await getDocs(
+      collection(
+        db,
+        `ChatPool`,
+        `Users`,
+        `${currentUserName}`,
+        `Data`,
+        `Freunde`
+      )
+    );
+    querySnapshot.forEach((doc) => {
+      //console.log("doc", doc.data());
+      tempOnlineArray.push(doc.data().id);
+    });
+    setUserFriends(tempOnlineArray);
+    console.log("userFriends:", userFriends);
+    //console.log("onlineArray: ", onlineArray);
+  };
+  */
+
+  const _storeFriendsOnline = async (item) => {
     console.log("item", item);
     try {
       await setDoc(
@@ -147,25 +208,8 @@ export const FriendSuggestionScreen = ({
     }
   };
 
-  /**
-   *  const _setStatusOnline = async (statusMessage) => {
-    try {
-      await setDoc(
-        doc(db, `ChatPool`, `Users`, `${currentUserName}`, `Status`),
-        {
-          status: statusMessage,
-        }
-      );
-      console.log("saved Status");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-   */
-
   const _refresh = () => {
     setisLoading(true);
-    _getApiResponse();
   };
 
   const _showModal = (item) => {
@@ -184,19 +228,6 @@ export const FriendSuggestionScreen = ({
     );
   };
 
-  const _getFreindListFromFirestore = async () => {
-    let tempOnlineArray = [];
-    const querySnapshot = await getDocs(collection(db, `Users`));
-    querySnapshot.forEach((doc) => {
-      tempOnlineArray.push(doc.data());
-    });
-    setGoogleFriendsSuggests(tempOnlineArray);
-    setisLoading(false);
-    console.log("GoofleArray: ", googleFriendsSuggests);
-  };
-
-  useMemo(() => _getFreindListFromFirestore(), []);
-
   const SuggestionList = () => {
     return (
       <>
@@ -213,7 +244,7 @@ export const FriendSuggestionScreen = ({
               showModal={() => _showModal(item.picture)}
             />
           )}
-          // keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.id}
           refreshing={isLoading}
           onRefresh={() => _refresh()}
         />

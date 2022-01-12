@@ -8,7 +8,7 @@ import { FriendInfoModal } from "../components/FriendInfoModal";
 import { useLinkTo } from "@react-navigation/native";
 import { FriendSuggestionScreen } from "./FriendSuggestionScreen";
 import { Loading } from "../components/Loading";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, doc } from "firebase/firestore";
 import { db } from "./FireBaseScreen";
 
 export const FriendsScreen = ({ navigation }) => {
@@ -20,9 +20,9 @@ export const FriendsScreen = ({ navigation }) => {
     currentUserName,
   } = React.useContext(PreferencesContext);
 
+  useEffect(() => _getDataFromFirestore(), []);
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  const [toggleSuggests, setToggleSuggests] = useState(false);
   const [onlineArray, setOnlineArray] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,16 +35,22 @@ export const FriendsScreen = ({ navigation }) => {
   const _getDataFromFirestore = async () => {
     let tempOnlineArray = [];
     const querySnapshot = await getDocs(
-      collection(db, `${currentUserName}_Friends`)
+      collection(
+        db,
+        `ChatPool`,
+        `Users`,
+        `${currentUserName}`,
+        `Data`,
+        `Freunde`
+      )
     );
     querySnapshot.forEach((doc) => {
+      console.log("doc", doc.data());
       tempOnlineArray.push(doc.data());
     });
     setOnlineArray(tempOnlineArray);
-    console.log("onlineArray: ", onlineArray);
+    //console.log("onlineArray: ", onlineArray);
   };
-
-  useEffect(() => _getDataFromFirestore(), []);
 
   //######################################################
   if (isSuggestionAtive) {
