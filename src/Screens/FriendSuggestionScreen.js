@@ -154,12 +154,19 @@ export const FriendSuggestionScreen = ({
   //************************************************************************ */
   const _getFreindListFromFirestore = async () => {
     let tempOnlineArray = [];
-    const querySnapshot = await getDocs(
-      query(collection(db, `Users`), where("id", "not-in", userFriends))
-    );
-    querySnapshot.forEach((doc) => {
-      tempOnlineArray.push(doc.data());
-    });
+    if (userFriends.length != 0) {
+      const querySnapshot = await getDocs(
+        query(collection(db, `Users`), where("id", "not-in", userFriends))
+      );
+      querySnapshot.forEach((doc) => {
+        tempOnlineArray.push(doc.data());
+      });
+    } else {
+      const querySnapshot = await getDocs(query(collection(db, `Users`)));
+      querySnapshot.forEach((doc) => {
+        tempOnlineArray.push(doc.data());
+      });
+    }
 
     setGoogleFriendsSuggests(tempOnlineArray);
     setisLoading(false);

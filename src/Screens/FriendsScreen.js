@@ -20,7 +20,7 @@ export const FriendsScreen = ({ navigation }) => {
     currentUserName,
   } = React.useContext(PreferencesContext);
 
-  useEffect(() => _getDataFromFirestore(), []);
+  useEffect(() => _getDataFromFirestore(), [userFriends]);
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   const [onlineArray, setOnlineArray] = useState([]);
