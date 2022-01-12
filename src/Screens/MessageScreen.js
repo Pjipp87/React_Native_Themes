@@ -11,6 +11,8 @@ export const MessageScreen = () => {
   const [text, setText] = React.useState("");
   const [messages, setMessages] = useState([]);
 
+  // Online Funktion integrieren (auch bei _sendMassge!)
+
   const _sendMessage = (text) => {
     const textneu = { text: text, name: currentUserName, id: uuidv4() };
     setMessages((messages) => [...messages, textneu]);
@@ -20,15 +22,19 @@ export const MessageScreen = () => {
 
   const MessagesField = ({ messagetext }) => {
     let messageSide;
+    let name;
     if (messagetext.name === currentUserName) {
       messageSide = "right";
+      name = "Ich";
     } else {
       messageSide = "left";
+      name = messagetext.name;
     }
+
     return (
       <View style={{ width: "100%" }}>
         <Text style={{ textAlign: messageSide }}>{messagetext.text}</Text>
-        <Text style={{ textAlign: messageSide }}>{messagetext.name}</Text>
+        <Text style={{ textAlign: messageSide }}>Ich</Text>
       </View>
     );
   };
