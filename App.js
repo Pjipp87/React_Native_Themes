@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import "react-native-get-random-values";
 import { MainScreen } from "./src/Screens/MainScreen";
 import { SettingsScreen } from "./src/Screens/SettingsScreen";
 import { FriendsScreen } from "./src/Screens/FriendsScreen";
