@@ -64,7 +64,7 @@ export const MessageScreen = () => {
 
   const MessagesField = ({ messagetext }) => {
     return (
-      <View style={{ width: "100%" }}>
+      <View style={{ width: "100%", paddingVertical: 5 }}>
         <Text>{messagetext.text}</Text>
         <Text>{messagetext.user}</Text>
       </View>
