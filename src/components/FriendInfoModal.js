@@ -27,18 +27,14 @@ export const FriendInfoModal = ({ scene, getFromFirestore }) => {
   const [focus, setFocus] = useState(false);
 
   const createTwoButtonAlert = () =>
-    Alert.alert(
-      "Achtung!",
-      `${aktiveFriend.first} ${aktiveFriend.last} wird entfernt`,
-      [
-        {
-          text: "Abbrechen",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        { text: "OK", onPress: () => _removeFriend() },
-      ]
-    );
+    Alert.alert("Achtung!", `${aktiveFriend.name} wird entfernt`, [
+      {
+        text: "Abbrechen",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      { text: "OK", onPress: () => _removeFriend() },
+    ]);
 
   useEffect(() => {
     setFocus(!focus);
@@ -61,14 +57,22 @@ export const FriendInfoModal = ({ scene, getFromFirestore }) => {
     console.log(aktiveFriend.id);
     // removeFriend(aktiveFriend);
     //setAktiveFriendFunc(null);
-    _deleteOnline(aktiveFriend.id);
+    _deleteOnline(aktiveFriend.name);
     getFromFirestore();
     toggleInfoModal();
   };
 
-  const _deleteOnline = async () => {
+  const _deleteOnline = async (name) => {
     await deleteDoc(
-      doc(db, `${currentUserName}_Friends`, `${aktiveFriend.id}`)
+      doc(
+        db,
+        `ChatPool`,
+        `Users`,
+        `${currentUserName}`,
+        `Data`,
+        `Freunde`,
+        `${name}`
+      )
     );
   };
 

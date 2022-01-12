@@ -25,6 +25,7 @@ export const FriendsScreen = ({ navigation }) => {
 
   const [onlineArray, setOnlineArray] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [userFriends, setuserFriends] = useState([]);
 
   const _switchScreens = () => {
     toggleSuggestion();
@@ -34,6 +35,7 @@ export const FriendsScreen = ({ navigation }) => {
 
   const _getDataFromFirestore = async () => {
     let tempOnlineArray = [];
+    let tempIDs = [];
     const querySnapshot = await getDocs(
       collection(
         db,
@@ -45,10 +47,11 @@ export const FriendsScreen = ({ navigation }) => {
       )
     );
     querySnapshot.forEach((doc) => {
-      console.log("doc", doc.data());
+      tempIDs.push(doc.data().id);
       tempOnlineArray.push(doc.data());
     });
     setOnlineArray(tempOnlineArray);
+    setuserFriends(tempIDs);
     //console.log("onlineArray: ", onlineArray);
   };
 
@@ -57,7 +60,8 @@ export const FriendsScreen = ({ navigation }) => {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <FriendSuggestionScreen
-          getFromFirestore={() => _getDataFromFirestore()}
+          getDataFromFirestore={() => _getDataFromFirestore()}
+          userFriends={userFriends}
         />
       </View>
     );

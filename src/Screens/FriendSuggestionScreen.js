@@ -41,7 +41,8 @@ export const FriendSuggestionScreen = ({
   scene,
   navigation,
   route,
-  getFromFirestore,
+  userFriends,
+  getDataFromFirestore,
 }) => {
   const { colors } = useTheme();
   const { isLogedIn, toggleLogin } = React.useContext(PreferencesContext);
@@ -60,7 +61,6 @@ export const FriendSuggestionScreen = ({
   const [showProfilPicture, setShowProfilPicture] = useState(false);
   const [profilePicture, setprofilePicture] = useState("");
   const [googleFriendsSuggests, setGoogleFriendsSuggests] = useState([]);
-  const [userFriends, setUserFriends] = useState([]);
 
   const [tempItem, setTempItem] = useState(null);
 
@@ -120,68 +120,11 @@ export const FriendSuggestionScreen = ({
         setGoogleFriendsSuggests(tempArray);
       }
       _storeFriendsOnline(item);
-      _getFreindListFromFirestore();
-      _getUserFreinds();
+      getDataFromFirestore();
     } else {
       alert("Kontakt bereits hinzugefügt!");
     }
   };
-
-  const _getFreindListFromFirestore = async () => {
-    let tempOnlineArray1 = [];
-    const querySnapshot1 = await getDocs(
-      collection(
-        db,
-        `ChatPool`,
-        `Users`,
-        `${currentUserName}`,
-        `Data`,
-        `Freunde`
-      )
-    );
-    querySnapshot1.forEach((doc) => {
-      //console.log("doc", doc.data());
-      tempOnlineArray1.push(doc.data().id);
-    });
-    setUserFriends(tempOnlineArray1);
-    console.log("userFriends:", userFriends);
-
-    let tempOnlineArray = [];
-    const querySnapshot = await getDocs(
-      query(collection(db, `Users`), where("id", "not-in", userFriends))
-    );
-    querySnapshot.forEach((doc) => {
-      console.log("id request".doc);
-      tempOnlineArray.push(doc.data());
-    });
-
-    setGoogleFriendsSuggests(tempOnlineArray);
-    setisLoading(false);
-  };
-
-  /**
-  * 
-  *  const _getUserFreinds = async () => {
-    let tempOnlineArray = [];
-    const querySnapshot = await getDocs(
-      collection(
-        db,
-        `ChatPool`,
-        `Users`,
-        `${currentUserName}`,
-        `Data`,
-        `Freunde`
-      )
-    );
-    querySnapshot.forEach((doc) => {
-      //console.log("doc", doc.data());
-      tempOnlineArray.push(doc.data().id);
-    });
-    setUserFriends(tempOnlineArray);
-    console.log("userFriends:", userFriends);
-    //console.log("onlineArray: ", onlineArray);
-  };
-  */
 
   const _storeFriendsOnline = async (item) => {
     console.log("item", item);
@@ -206,6 +149,38 @@ export const FriendSuggestionScreen = ({
     } catch (error) {
       console.log(error);
     }
+  };
+
+  //************************************************************************ */
+  const _getFreindListFromFirestore = async () => {
+    let tempOnlineArray = [];
+    const querySnapshot = await getDocs(
+      query(collection(db, `Users`), where("id", "not-in", userFriends))
+    );
+    querySnapshot.forEach((doc) => {
+      tempOnlineArray.push(doc.data());
+    });
+
+    setGoogleFriendsSuggests(tempOnlineArray);
+    setisLoading(false);
+  };
+
+  const _getUserFreinds = async () => {
+    let tempOnlineArray = [];
+    const querySnapshot = await getDocs(
+      collection(
+        db,
+        `ChatPool`,
+        `Users`,
+        `${currentUserName}`,
+        `Data`,
+        `Freunde`
+      )
+    );
+    querySnapshot.forEach((doc) => {
+      tempOnlineArray.push(doc.data().id);
+    });
+    setUserFriends(tempOnlineArray);
   };
 
   const _refresh = () => {
