@@ -20,9 +20,9 @@ export const MessageScreen = () => {
 
   const MessagesField = ({ messagetext }) => {
     return (
-      <View style={{ width: "100%", justifyContent: "flex-end" }}>
+      <View style={{ width: "100%" }}>
         <Text style={{ textAlign: "right" }}>{messagetext.text}</Text>
-        <Text>{messagetext.name}</Text>
+        <Text style={{ textAlign: "right" }}>{messagetext.name}</Text>
       </View>
     );
   };
@@ -51,6 +51,11 @@ export const MessageScreen = () => {
           data={messages}
           renderItem={({ item }) => <MessagesField messagetext={item} />}
           keyExtractor={(item) => item.id}
+          style={{ width: "90%", flexDirection: "column-reverse" }}
+          contentContainerStyle={{
+            justifyContent: "flex-end",
+            alignItems: "flex-end",
+          }}
         />
       </View>
       <View
