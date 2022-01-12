@@ -71,9 +71,45 @@ export const SigninPage = ({ setIsAuthenticated, auth }) => {
   }, [response]);
 
   return (
-    <View style={{ flex: 1, paddingHorizontal: 20, justifyContent: "center" }}>
-      <Headline style={{ textAlign: "center" }}>Einloggen</Headline>
-      <View style={{ paddingVertical: 30 }}>
+    <View
+      style={{
+        flex: 1,
+        paddingHorizontal: 20,
+        paddingTop: 150,
+        justifyContent: "space-around",
+      }}
+    >
+      <Headline
+        style={{
+          textAlign: "center",
+          marginBottom: 15,
+          fontWeight: "bold",
+          letterSpacing: 10,
+        }}
+      >
+        Einloggen
+      </Headline>
+
+      <Button
+        mode="contained"
+        icon="google"
+        disabled={!request}
+        color="blue"
+        style={{ marginHorizontal: 65, elevation: 15 }}
+        contentStyle={{ paddingVertical: 5 }}
+        onPress={() => {
+          promptAsync();
+        }}
+      >
+        Mit Google Account
+      </Button>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({});
+
+/**      <View style={{ paddingVertical: 30 }}>
         <TextInput
           style={{ marginVertical: 10 }}
           label="E-Mail"
@@ -96,17 +132,4 @@ export const SigninPage = ({ setIsAuthenticated, auth }) => {
           }
         />
       </View>
-      <Button onPress={() => login(email, password)}>Login</Button>
-      <Button
-        disabled={!request}
-        onPress={() => {
-          promptAsync();
-        }}
-      >
-        Login2
-      </Button>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({});
+      <Button onPress={() => login(email, password)}>Login</Button> */
