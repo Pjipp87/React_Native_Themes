@@ -12,6 +12,7 @@ export const MessageScreen = () => {
   const [messages, setMessages] = useState([]);
 
   // Online Funktion integrieren (auch bei _sendMassge!)
+  // NewMessage Badge integrieren (vllt über TOGGLEMESSAGE (0 Nachichten === false))
 
   const _sendMessage = (text) => {
     const textneu = { text: text, name: currentUserName, id: uuidv4() };
