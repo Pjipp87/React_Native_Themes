@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Image, FlatList, Text } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Image,
+  FlatList,
+  Text,
+  Vibration,
+} from "react-native";
 import { Button, Headline, TextInput } from "react-native-paper";
 import { PreferencesContext } from "../utils/ThemeContext";
 import { useWindowDimensions } from "react-native";
@@ -28,27 +35,33 @@ export const MessageScreen = () => {
     _getMessagesFromServer();
   }, []);
 
+  console.log(currentUserName);
+
   const _sendMessage = (text) => {
     const time = new Date();
+    const timeDate = time.toLocaleString();
     const timeInSeconds = time.getTime();
     const textneu = {
       text: text,
       user: currentUserName,
       id: uuidv4(),
-      time: timeInSeconds,
+      timestamp: timeInSeconds,
+      time: timeDate,
     };
     setMessages((messages) => [...messages, textneu]);
     console.log(messages);
     _sendMessageOnline(textneu);
     _getMessagesFromServer();
+    Vibration.vibrate(50);
     setText("");
   };
 
   const _sendMessageOnline = async (message) => {
-    await setDoc(doc(db, "MessagePool", `${message.time}`), {
+    await setDoc(doc(db, "MessagePool", `${message.timestamp}`), {
       id: message.id,
       text: message.text,
       user: message.user,
+      time: message.time,
     });
   };
 
@@ -63,10 +76,30 @@ export const MessageScreen = () => {
   };
 
   const MessagesField = ({ messagetext }) => {
+    const ownMessage = messagetext.user === currentUserName;
+    console.log("Ownmessage: ", ownMessage);
     return (
-      <View style={{ width: "100%", paddingVertical: 5 }}>
-        <Text>{messagetext.text}</Text>
-        <Text>{messagetext.user}</Text>
+      <View
+        style={{
+          marginVertical: 5,
+        }}
+      >
+        <View
+          style={{
+            alignSelf: ownMessage ? "flex-end" : "flex-start",
+            backgroundColor: ownMessage ? "lightgreen" : "lightblue",
+            paddingHorizontal: 15,
+            paddingVertical: 5,
+            borderRadius: 15,
+          }}
+        >
+          <Text style={{ textAlign: ownMessage ? "right" : "left" }}>
+            {messagetext.text}
+          </Text>
+          <Text style={{ textAlign: ownMessage ? "right" : "left" }}>
+            {messagetext.user}
+          </Text>
+        </View>
       </View>
     );
   };
@@ -81,21 +114,15 @@ export const MessageScreen = () => {
         style={{
           width: useWindowDimensions().width,
           flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
+          paddingHorizontal: 15,
           marginBottom: 15,
           backgroundColor: "lightgrey",
         }}
       >
-        <Button mode="contained" compact={true} onPress={() => toggleMessage()}>
-          Löschen
-        </Button>
-
         <FlatList
           data={messages}
           renderItem={({ item }) => <MessagesField messagetext={item} />}
           keyExtractor={(item) => item.id}
-          style={{ width: "90%", flexDirection: "column-reverse" }}
         />
       </View>
       <View
@@ -131,3 +158,9 @@ export const MessageScreen = () => {
 };
 
 const styles = StyleSheet.create({});
+
+/**
+ *        <Button mode="contained" compact={true} onPress={() => toggleMessage()}>
+          Löschen
+        </Button>
+ */
