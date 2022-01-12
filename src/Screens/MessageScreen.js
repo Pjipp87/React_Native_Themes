@@ -1,41 +1,72 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Image, FlatList, Text } from "react-native";
 import { Button, Headline, TextInput } from "react-native-paper";
 import { PreferencesContext } from "../utils/ThemeContext";
 import { useWindowDimensions } from "react-native";
 import { v4 as uuidv4 } from "uuid";
+import { db } from "./FireBaseScreen";
+import {
+  collection,
+  doc,
+  setDoc,
+  getDoc,
+  getDocs,
+  Timestamp,
+} from "firebase/firestore";
 
 export const MessageScreen = () => {
   const { toggleMessage, currentUserName } =
     React.useContext(PreferencesContext);
   const [text, setText] = React.useState("");
   const [messages, setMessages] = useState([]);
+  const [messagesFromServer, setMessagesFromServer] = useState([]);
 
   // Online Funktion integrieren (auch bei _sendMassge!)
   // NewMessage Badge integrieren (vllt über TOGGLEMESSAGE (0 Nachichten === false))
 
+  useEffect(() => {
+    _getMessagesFromServer();
+  }, []);
+
   const _sendMessage = (text) => {
-    const textneu = { text: text, name: currentUserName, id: uuidv4() };
+    const time = new Date();
+    const timeInSeconds = time.getTime();
+    const textneu = {
+      text: text,
+      user: currentUserName,
+      id: uuidv4(),
+      time: timeInSeconds,
+    };
     setMessages((messages) => [...messages, textneu]);
+    console.log(messages);
+    _sendMessageOnline(textneu);
+    _getMessagesFromServer();
     setText("");
-    console.log("messages4", messages);
+  };
+
+  const _sendMessageOnline = async (message) => {
+    await setDoc(doc(db, "MessagePool", `${message.time}`), {
+      id: message.id,
+      text: message.text,
+      user: message.user,
+    });
+  };
+
+  const _getMessagesFromServer = async () => {
+    let tempMessages = [];
+    let tempIDs = [];
+    const querySnapshot = await getDocs(collection(db, "MessagePool"));
+    querySnapshot.forEach((doc) => {
+      tempMessages.push(doc.data());
+    });
+    setMessages(tempMessages);
   };
 
   const MessagesField = ({ messagetext }) => {
-    let messageSide;
-    let name;
-    if (messagetext.name === currentUserName) {
-      messageSide = "right";
-      name = "Ich";
-    } else {
-      messageSide = "left";
-      name = messagetext.name;
-    }
-
     return (
       <View style={{ width: "100%" }}>
-        <Text style={{ textAlign: messageSide }}>{messagetext.text}</Text>
-        <Text style={{ textAlign: messageSide }}>Ich</Text>
+        <Text>{messagetext.text}</Text>
+        <Text>{messagetext.user}</Text>
       </View>
     );
   };
