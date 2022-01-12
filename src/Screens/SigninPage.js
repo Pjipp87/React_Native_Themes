@@ -1,13 +1,9 @@
-import React, { useState, useContext, useEffect, useMemo } from "react";
-import { StyleSheet, View } from "react-native";
-import { Text, Button, Headline, TextInput } from "react-native-paper";
-//import { auth } from "./FireBaseScreen";
+import React, { useState, useEffect, useMemo } from "react";
+import { StyleSheet, View, Vibration } from "react-native";
+import { Text, Button, Headline } from "react-native-paper";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { PreferencesContext } from "../utils/ThemeContext";
 import * as WebBrowser from "expo-web-browser";
-import { ResponseType } from "expo-auth-session";
 import * as Google from "expo-auth-session/providers/google";
-import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 
 WebBrowser.maybeCompleteAuthSession();
@@ -70,6 +66,11 @@ export const SigninPage = ({ setIsAuthenticated, auth }) => {
     };
   }, [response]);
 
+  const _login = () => {
+    Vibration.vibrate(50);
+    promptAsync();
+  };
+
   return (
     <View
       style={{
@@ -98,7 +99,7 @@ export const SigninPage = ({ setIsAuthenticated, auth }) => {
         style={{ marginHorizontal: 65, elevation: 15 }}
         contentStyle={{ paddingVertical: 5 }}
         onPress={() => {
-          promptAsync();
+          _login();
         }}
       >
         Mit Google Account
