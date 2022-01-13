@@ -57,6 +57,7 @@ export const MessageScreen = () => {
   };
 
   const _sendMessageOnline = async (message) => {
+    console.log("###################", message);
     await setDoc(doc(db, "MessagePool", `${message.timestamp}`), {
       id: message.id,
       text: message.text,
@@ -77,7 +78,7 @@ export const MessageScreen = () => {
 
   const MessagesField = ({ messagetext }) => {
     const ownMessage = messagetext.user === currentUserName;
-    console.log("Ownmessage: ", ownMessage);
+    //console.log("Ownmessage: ", ownMessage);
     return (
       <View
         style={{
@@ -97,7 +98,7 @@ export const MessageScreen = () => {
             {messagetext.text}
           </Text>
           <Text style={{ textAlign: ownMessage ? "right" : "left" }}>
-            {messagetext.user}
+            {ownMessage ? "Ich" : messagetext.user}
           </Text>
         </View>
       </View>
