@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
   StyleSheet,
   View,
@@ -19,6 +19,9 @@ import {
   getDoc,
   getDocs,
   Timestamp,
+  onSnapshot,
+  query,
+  where,
 } from "firebase/firestore";
 
 export const MessageScreen = () => {
@@ -27,15 +30,15 @@ export const MessageScreen = () => {
   const [text, setText] = React.useState("");
   const [messages, setMessages] = useState([]);
   const [messagesFromServer, setMessagesFromServer] = useState([]);
+  const list = useRef(null);
 
+  console.log("ItemLayout: ");
   // Online Funktion integrieren (auch bei _sendMassge!)
   // NewMessage Badge integrieren (vllt über TOGGLEMESSAGE (0 Nachichten === false))
 
   useEffect(() => {
     _getMessagesFromServer();
   }, []);
-
-  console.log(currentUserName);
 
   const _sendMessage = (text) => {
     const time = new Date();
@@ -73,8 +76,26 @@ export const MessageScreen = () => {
     querySnapshot.forEach((doc) => {
       tempMessages.push(doc.data());
     });
-    setMessages(tempMessages);
+    const waitForMessages = await setMessages(tempMessages);
+    const itemLayout = list.current.getItemLayout;
+    console.log(itemLayout);
   };
+
+  /**
+   * 
+   *
+   *     const q = query(collection(db, "MessagePool"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const tempArray = [];
+      querySnapshot.forEach((doc) => {
+        tempArray.push(doc.data());
+      });
+      setMessages(tempArray);
+    });
+    return () => {
+      unsubscribe();
+    }; 
+   */
 
   const MessagesField = ({ messagetext }) => {
     const ownMessage = messagetext.user === currentUserName;
@@ -121,6 +142,7 @@ export const MessageScreen = () => {
         }}
       >
         <FlatList
+          ref={list}
           data={messages}
           renderItem={({ item }) => <MessagesField messagetext={item} />}
           keyExtractor={(item) => item.id}
